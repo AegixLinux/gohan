@@ -22,3 +22,5 @@ So, the entire sentence "Sosan desu ga, dohzo o-meshi agari kudasai." can be tra
 This is something a host might say to a guest when serving a meal in Japan.
 The host is expressing humility and politeness, both of which are very important in Japanese culture.
 ```
+
+It's not much, but pls try 🙇
