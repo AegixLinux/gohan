@@ -9,9 +9,16 @@ This repository is like the cooked rice of TANKLINUX.
 ~ Sosan desu ga, dohzo o-meshi agari kudasai. ~
 
 ``` Text
-"Sosan desu ga" = "This is modest" or "It's not much". It's a common phrase in Japanese used when offering something to someone as a way to show humility.
-"Dohzo" = "Please"
-"O-meshi agari kudasai" is a polite form of a phrase used to invite someone to eat. It can be translated as "Please enjoy your meal" or "Please help yourself".
+"Sosan desu ga" = "This is modest" or "It's not much".
+It's a common phrase in Japanese used when offering something to someone as a way to show humility.
 
-So, the entire sentence "Sosan desu ga, dohzo o-meshi agari kudasai." can be translated to "It's not much, but please, help yourself to the meal." This is something a host might say to a guest when serving a meal in Japan. The host is expressing humility and politeness, both of which are very important in Japanese culture.
+"Dohzo" = "Please"
+
+"O-meshi agari kudasai" is a polite form of a phrase used to invite someone to eat.
+It can be translated as "Please enjoy your meal" or "Please help yourself".
+
+So, the entire sentence "Sosan desu ga, dohzo o-meshi agari kudasai." can be translated to
+"It's not much, but please, help yourself to the meal."
+This is something a host might say to a guest when serving a meal in Japan.
+The host is expressing humility and politeness, both of which are very important in Japanese culture.
 ```
