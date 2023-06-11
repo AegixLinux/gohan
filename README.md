@@ -1,12 +1,22 @@
 # gohan
 
-TANKLINUX uses GOHAN to store and configure dot files.
+TANKLINUX uses GOHAN to store and configure dot files deployed by [BARBS](https://tanklinux.com/barbs.sh).
+
+There are a collection of neat scripts located in `~/.local/bin` you can check out.
+
+There are configurations for vim, zsh, lf, sxiv, mpv, mpd/ncmpcpp, xdg default programs, inputrc, and others.
+
+Check out file and directory bookmarks in the `~/.config/shell/` directory.
+
+Compatibility with the TANKLINUX builds of suckless software programs dwm, dwmblocks, dmenu, st is baked in.
 
 Gohan means "cooked rice" in Japanese, and it is a synonym for food in general. The literal translation for the Japanese words for breakfast and dinner is "the morning rice" and "the evening rice."
 The "go" in gohan is an honorific form added to "han" which adds politeness to the word.
 This repository is like the cooked rice of TANKLINUX.
 
 ~ Sosan desu ga, dohzo o-meshi agari kudasai. ~
+
+This phrase reflects a humble invitation for you to use this project.
 
 ``` Text
 "Sosan desu ga" = "This is modest" or "It's not much".
