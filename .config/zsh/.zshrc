@@ -1,10 +1,30 @@
-# TANKLINUX maintainers will update this file in the near future. 
-# For now, this is borrowed from https://github.com/LukeSmithxyz/voidrice 
-
+# TANKLINUX .zshrc initially borrowed from Luke's config for the Zoomer Shell
 
 # Enable colors and change prompt:
 autoload -U colors && colors	# Load colors
-PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
+# PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b " # Old Luke default (aka the ugly one)
+
+# Official TANKLINUX Default Colors
+PS1='%B%{%F{217}%}[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{217}%}@%{%f%}%B%{%F{179}%}%M %{%f%}%{%F{157}%}%~%{%f%}%B%{%F{217}%}]%{%f%}$%b '
+# Alt 1
+# PS1='%B%{%F{133}%}[%{%f%}%B%{%F{67}%}%n%{%f%}%B%{%F{133}%}@%{%f%}%B%{%F{67}%}%M %{%f%}%B%{%F{132}%}%~%{%f%}%B%{%F{133}%}]%{%f%}$%b '
+# Alt 2
+# PS1='%B%{%F{217}%}[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{209}%}@%{%f%}%B%{%F{179}%}%M %{%f%}%{%F{157}%}%~%{%f%}%B%{%F{217}%}]%{%f%}$%b '
+# Ocean Theme
+# PS1='%B%{%F{33}%}[%{%f%}%B%{%F{39}%}%n%{%f%}%B%{%F{45}%}@%{%f%}%B%{%F{81}%}%M %{%f%}%B%{%F{44}%}%~%{%f%}%B%{%F{33}%}]%{%f%}$%b '
+# Forest theme
+# PS1='%B%{%F{58}%}[%{%f%}%B%{%F{64}%}%n%{%f%}%B%{%F{100}%}@%{%f%}%B%{%F{130}%}%M %{%f%}%B%{%F{22}%}%~%{%f%}%B%{%F{58}%}]%{%f%}$%b '
+# Sunset theme
+# PS1='%B%{%F{202}%}[%{%f%}%B%{%F{196}%}%n%{%f%}%B%{%F{208}%}@%{%f%}%B%{%F{214}%}%M %{%f%}%B%{%F{226}%}%~%{%f%}%B%{%F{202}%}]%{%f%}$%b '
+# Winter theme
+# PS1='%B%{%F{111}%}[%{%f%}%B%{%F{117}%}%n%{%f%}%B%{%F{123}%}@%{%f%}%B%{%F{159}%}%M %{%f%}%B%{%F{255}%}%~%{%f%}%B%{%F{111}%}]%{%f%}$%b '
+# Earth theme
+# PS1='%B%{%F{94}%}[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{94}%}@%{%f%}%B%{%F{130}%}%M %{%f%}%B%{%F{60}%}%~%{%f%}%B%{%F{94}%}]%{%f%}$%b '
+# Ocean mist
+#PS1='%B%{%F{110}%}[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{110}%}@%{%f%}%B%{%F{245}%}%M %{%f%}%B%{%F{100}%}%~%{%f%}%B%{%F{110}%}]%{%f%}$%b '
+# Muted
+# PS1='%B%{%F{101}%}[%{%f%}%B%{%F{71}%}%n%{%f%}%B%{%F{101}%}@%{%f%}%B%{%F{58}%}%M %{%f%}%B%{%F{28}%}%~%{%f%}%B%{%F{101}%}]%{%f%}$%b '
+
 setopt autocd		# Automatically cd into typed directory.
 stty stop undef		# Disable ctrl-s to freeze terminal.
 setopt interactive_comments
