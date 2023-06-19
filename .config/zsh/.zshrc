@@ -5,7 +5,8 @@ autoload -U colors && colors	# Load colors
 # PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b " # Old Luke default (aka the ugly one)
 
 # Official TANKLINUX Default Colors
-PS1='%B%{%F{217}%}[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{217}%}@%{%f%}%B%{%F{179}%}%M %{%f%}%{%F{157}%}%~%{%f%}%B%{%F{217}%}]%{%f%}$%b '
+# PS1='%B%{%F{217}%}[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{217}%}@%{%f%}%B%{%F{179}%}%M %{%f%}%{%F{157}%}%~%{%f%}%B%{%F{217}%}]%{%f%}$%b '
+PS1='%B%{%F{106}%}[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{106}%}@%{%f%}%B%{%F{179}%}%M %{%f%}%{%F{157}%}%~%{%f%}%B%{%F{106}%}]%{%f%}$%b '
 # Alt 1
 # PS1='%B%{%F{133}%}[%{%f%}%B%{%F{67}%}%n%{%f%}%B%{%F{133}%}@%{%f%}%B%{%F{67}%}%M %{%f%}%B%{%F{132}%}%~%{%f%}%B%{%F{133}%}]%{%f%}$%b '
 # Alt 2
