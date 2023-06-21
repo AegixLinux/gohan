@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Borrowing heavily from voidrice
+
 # Use neovim for vim if present.
 [ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
 
@@ -12,6 +14,26 @@ for command in mount umount sv pacman updatedb su shutdown poweroff reboot ; do
 done; unset command
 
 se() { cd ~/.local/bin; $EDITOR $(fzf) ;}
+
+# TANKLINUX
+alias \
+	ll="ls -lsah" \
+	dock="sh ~/.screenlayout/dock.sh" \
+	undock="sh ~/.screenlayout/undock.sh" \
+	b="sudo brightnessctl set 100%" \
+	dark="sudo brightnessctl set 5%" \
+	bh="sudo brightnessctl set 50%" \
+	be="sudo brightnessctl set 12%" \
+	bq="sudo brightnessctl set 25%" \
+	black="sudo brightnessctl set 0%" \
+	gcommit="git commit -m "$(date +"%D %T")"" \
+	commit="git commit -m "$(date +"%D %T")"" \
+	sta="git status" \
+	add="git add -A" \
+	push="git push" \
+	pull="git pull" \
+	gg="add && commit && push" \
+
 
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
