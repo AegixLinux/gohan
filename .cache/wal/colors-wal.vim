@@ -1,0 +1,23 @@
+" Special
+let wallpaper  = "/home/beach/.local/share/misty-nagano.jpg"
+let background = "#0a0a08"
+let foreground = "#dfdfdf"
+let cursor     = "#dfdfdf"
+
+" Colors
+let color0  = "#0a0a08"
+let color1  = "#6F6F6D"
+let color2  = "#8C6F2C"
+let color3  = "#7C8163"
+let color4  = "#928951"
+let color5  = "#969593"
+let color6  = "#C5BBB5"
+let color7  = "#dfdfdf"
+let color8  = "#9c9c9c"
+let color9  = "#6F6F6D"
+let color10 = "#8C6F2C"
+let color11 = "#7C8163"
+let color12 = "#928951"
+let color13 = "#969593"
+let color14 = "#C5BBB5"
+let color15 = "#dfdfdf"

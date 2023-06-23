@@ -1,0 +1,21 @@
+set $wallpaper /home/beach/.local/share/misty-nagano.jpg
+
+set $background #0a0a08
+set $foreground #dfdfdf
+
+set $color0 #0a0a08
+set $color1 #6F6F6D
+set $color2 #8C6F2C
+set $color3 #7C8163
+set $color4 #928951
+set $color5 #969593
+set $color6 #C5BBB5
+set $color7 #dfdfdf
+set $color8 #9c9c9c
+set $color9 #6F6F6D
+set $color10 #8C6F2C
+set $color11 #7C8163
+set $color12 #928951
+set $color13 #969593
+set $color14 #C5BBB5
+set $color15 #dfdfdf

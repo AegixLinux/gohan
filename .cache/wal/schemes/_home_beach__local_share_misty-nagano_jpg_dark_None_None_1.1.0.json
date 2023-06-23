@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/beach/.local/share/misty-nagano.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0a0a08",
+        "foreground": "#dfdfdf",
+        "cursor": "#dfdfdf"
+    },
+    "colors": {
+        "color0": "#0a0a08",
+        "color1": "#6F6F6D",
+        "color2": "#8C6F2C",
+        "color3": "#7C8163",
+        "color4": "#928951",
+        "color5": "#969593",
+        "color6": "#C5BBB5",
+        "color7": "#dfdfdf",
+        "color8": "#9c9c9c",
+        "color9": "#6F6F6D",
+        "color10": "#8C6F2C",
+        "color11": "#7C8163",
+        "color12": "#928951",
+        "color13": "#969593",
+        "color14": "#C5BBB5",
+        "color15": "#dfdfdf"
+    }
+}
