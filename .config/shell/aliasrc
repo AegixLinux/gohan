@@ -33,7 +33,7 @@ alias \
 	push="git push" \
 	pull="git pull" \
 	gg="add && commit && push" \
-
+	update="sudo pacman -Syu --noconfirm" \
 
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
