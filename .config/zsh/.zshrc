@@ -2,15 +2,10 @@
 
 # Enable colors and change prompt:
 autoload -U colors && colors	# Load colors
-# PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b " # Old Luke default (aka the ugly one)
 
-# Official TANKLINUX Default Colors
-# PS1='%B%{%F{217}%}[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{217}%}@%{%f%}%B%{%F{179}%}%M %{%f%}%{%F{157}%}%~%{%f%}%B%{%F{217}%}]%{%f%}$%b '
-# PS1='%B%{%F{106}%}[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{106}%}@%{%f%}%B%{%F{179}%}%M %{%f%}%{%F{157}%}%~%{%f%}%B%{%F{106}%}]%{%f%}$%b '
-# PS1='%B%{%F{107}%}[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{215}%}@%{%f%}%B%{%F{65}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{107}%}]%{%f%}$%b '
-
-# PS1='%B%{%F{107}%}🪶TANKLINUX:[%{%f%}%B%{%F{66}%}%n%{%f%}%B%{%F{215}%}✨%{%f%}%B%{%F{65}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{107}%}]%{%f%}$%b '
-PS1='%B%{%F{270}%}🪶TANKLINUX:[%{%f%}%B%{%F{270}%}%n%{%f%}%B%{%F{215}%}✨%{%f%}%B%{%F{271}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{107}%}]%{%f%}$%b '
+PS1='%B%{%F{15}%}🪶TANKLINUX:%B%{%F{13}%}[%{%f%}%B%{%F{12}%}%n%{%f%}%B%{%F{107}%}✨%{%f%}%B%{%F{15}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{13}%}]%{%f%}$%b '
+# Minimal version:
+# PS1='✨ %~ '
 
 setopt autocd		# Automatically cd into typed directory.
 stty stop undef		# Disable ctrl-s to freeze terminal.
