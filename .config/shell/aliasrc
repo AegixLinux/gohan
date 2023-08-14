@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# Borrowing heavily from voidrice
-
 # Use neovim for vim if present.
 [ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
 
@@ -18,7 +16,7 @@ se() { cd ~/.local/bin; $EDITOR $(fzf) ;}
 # TANKLINUX
 alias \
 	ll="ls -lsah" \
-	dock="sh ~/.screenlayout/dock.sh" \
+	dock="sh ~/.screenlayout/bigdock.sh" \
 	undock="sh ~/.screenlayout/undock.sh" \
 	b="sudo brightnessctl set 100%" \
 	dark="sudo brightnessctl set 5%" \
@@ -34,9 +32,22 @@ alias \
 	pull="git pull" \
 	gg="add && commit && push" \
 	update="sudo pacman -Syu --noconfirm" \
+	view="sxiv"
+
+# vscode
+
+alias vscode='~/Applications/vs-code-insider/VSCode-linux-x64/code-insiders'
+
+# Local machines
+alias \
+	stride="ssh tim@192.168.0.175"
 
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
+	ll="ls -lsah" \
+	dock="sh ~/.screenlayout/dock.sh" \
+	undock="sh ~/.screenlayout/undock.sh" \
+	entropy="sudo dd if=/dev/sda1 of=/dev/null" \
 	cp="cp -iv" \
 	mv="mv -iv" \
 	rm="rm -vI" \
@@ -44,7 +55,17 @@ alias \
 	mkd="mkdir -pv" \
 	yt="yt-dlp --embed-metadata -i" \
 	yta="yt -x -f bestaudio/best" \
-	ffmpeg="ffmpeg -hide_banner"
+	ffmpeg="ffmpeg -hide_banner" \
+
+# Kino git aliases. Go into a local repo, make some changes, type "gg"
+# And you will have your changes pushed to remote with today's date as the comment
+alias \
+	commit="git commit -m \"\$(date +\"%D %T\")\"" \
+	sta='git status' \
+	add='git add -A' \
+	push='git push' \
+	pull='git pull' \
+	gg='add && commit && push' \
 
 # Colorize commands when possible.
 alias \
@@ -74,3 +95,4 @@ alias \
 	magit="nvim -c MagitOnly" \
 	ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc" \
 	weath="less -S ${XDG_CACHE_HOME:-$HOME/.cache}/weatherreport" \
+# Watchers Check 1 2 3 4 5

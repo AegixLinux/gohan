@@ -1,0 +1,12 @@
+.config/gtk-3.0/bookmarks
+.config/lf/shortcutrc
+.config/mpv/script_modules/
+.config/ncmpcpp/error.log
+.config/nvim/autoload/
+.config/nvim/plugged/
+.config/nvim/shortcuts.vim
+.config/pulse/cookie
+.config/shell/shortcutrc
+.config/shell/watchers-test-1
+.config/shell/zshnameddirrc
+.config/zsh/.zcompdump
