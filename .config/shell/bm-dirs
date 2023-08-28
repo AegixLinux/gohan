@@ -12,3 +12,5 @@ pp  ${XDG_PICTURES_DIR:-$HOME/Pictures}
 sc  $HOME/.local/bin
 src $HOME/.local/src
 vv  ${XDG_VIDEOS_DIR:-$HOME/Videos}
+co  $HOME/code
+tank  $HOME/code/tanklinux

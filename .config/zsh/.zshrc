@@ -6,10 +6,10 @@ autoload -U colors && colors	# Load colors
 
 # PS1='%B%{%F{64}%}🪶TANKLINUX:[%{%f%}%B%{%F{12}%}%n%{%f%}%B%{%F{107}%}✨%{%f%}%B%{%F{107}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{64}%}]%{%f%}$%b '
 
-PS1='%B%{%F{15}%}🪶TANKLINUX:%B%{%F{13}%}[%{%f%}%B%{%F{12}%}%n%{%f%}%B%{%F{107}%}✨%{%f%}%B%{%F{15}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{13}%}]%{%f%}$%b '
+#PS1='%B%{%F{15}%}🪶TANKLINUX:%B%{%F{13}%}[%{%f%}%B%{%F{12}%}%n%{%f%}%B%{%F{107}%}✨%{%f%}%B%{%F{15}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{13}%}]%{%f%}$%b '
 
 # Minimal
-# PS1='✨ %~ '
+PS1='✨ %~ '
 
 setopt autocd		# Automatically cd into typed directory.
 stty stop undef		# Disable ctrl-s to freeze terminal.
