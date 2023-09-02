@@ -32,7 +32,8 @@ alias \
 	pull="git pull" \
 	gg="add && commit && push" \
 	update="sudo pacman -Syu --noconfirm" \
-	view="sxiv"
+	view="sxiv" \
+	help="groff -mom ~/.local/src/dwm/barbs.mom -Tpdf | zathura -"
 
 # vscode
 
