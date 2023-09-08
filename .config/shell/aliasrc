@@ -31,7 +31,7 @@ alias \
 	push="git push" \
 	pull="git pull" \
 	gg="add && commit && push" \
-	update="sudo pacman -Syu --noconfirm" \
+	update="yay --noconfirm" \
 	view="sxiv" \
 	help="groff -mom ~/.local/src/dwm/barbs.mom -Tpdf | zathura -"
 
