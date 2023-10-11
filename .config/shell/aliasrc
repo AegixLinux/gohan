@@ -16,7 +16,7 @@ se() { cd ~/.local/bin; $EDITOR $(fzf) ;}
 # TANKLINUX
 alias \
 	ll="ls -lsah" \
-	dock="sh ~/.screenlayout/bigdock.sh" \
+	dock="sh ~/.screenlayout/bigdock.sh && setbg" \
 	undock="sh ~/.screenlayout/undock.sh" \
 	b="sudo brightnessctl set 100%" \
 	dark="sudo brightnessctl set 5%" \
