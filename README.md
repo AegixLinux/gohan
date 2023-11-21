@@ -1,6 +1,7 @@
 # gohan
 
-Aegix Linux uses GOHAN to store and configure dot files deployed by [BARBS](https://aegixlinux.org/barbs.sh).
+Dot files are usually based on configuration, and they start with a `.`.
+Aegix uses this repo `gohan` to store and configure dot files deployed by [BARBS](https://aegixlinux.org/barbs.sh).
 
 There are a collection of neat scripts located in `~/.local/bin` you can check out.
 
