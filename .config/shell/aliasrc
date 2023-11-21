@@ -13,7 +13,7 @@ done; unset command
 
 se() { cd ~/.local/bin; $EDITOR $(fzf) ;}
 
-# TANKLINUX
+# aegix
 alias \
 	ll="ls -lsah" \
 	dock="sh ~/.screenlayout/bigdock.sh && setbg" \

@@ -1,12 +1,12 @@
-# TANKLINUX .zshrc initially borrowed from Luke's config for the Zoomer Shell
+# Aegix .zshrc initially borrowed from Luke's config for the Zoomer Shell
 
 # Enable colors and change prompt:
 autoload -U colors && colors	# Load colors
-#PS1='%B%{%F{64}%}🪶TANKLINUX:[%{%F{107}%}%n✨%M %~%{%F{64}%}]$%b '
+#PS1='%B%{%F{64}%}🪶Aegix:[%{%F{107}%}%n✨%M %~%{%F{64}%}]$%b '
 
-# PS1='%B%{%F{64}%}🪶TANKLINUX:[%{%f%}%B%{%F{12}%}%n%{%f%}%B%{%F{107}%}✨%{%f%}%B%{%F{107}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{64}%}]%{%f%}$%b '
+# PS1='%B%{%F{64}%}🪶Aegix:[%{%f%}%B%{%F{12}%}%n%{%f%}%B%{%F{107}%}✨%{%f%}%B%{%F{107}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{64}%}]%{%f%}$%b '
 
-#PS1='%B%{%F{15}%}🪶TANKLINUX:%B%{%F{13}%}[%{%f%}%B%{%F{12}%}%n%{%f%}%B%{%F{107}%}✨%{%f%}%B%{%F{15}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{13}%}]%{%f%}$%b '
+#PS1='%B%{%F{15}%}🪶Aegix:%B%{%F{13}%}[%{%f%}%B%{%F{12}%}%n%{%f%}%B%{%F{107}%}✨%{%f%}%B%{%F{15}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{13}%}]%{%f%}$%b '
 
 # Minimal
 PS1='✨ %~ '
