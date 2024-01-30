@@ -16,7 +16,7 @@ se() { cd ~/.local/bin; $EDITOR $(fzf) ;}
 # aegix
 alias \
 	ll="ls -lsah" \
-	dock="sh ~/.screenlayout/bigdock.sh && setbg" \
+	dock="sh ~/.screenlayout/dock.sh && setbg" \
 	undock="sh ~/.screenlayout/undock.sh" \
 	mir="sh ~/.screenlayout/mirror.sh && setbg" \
 	b="sudo brightnessctl set 100%" \
