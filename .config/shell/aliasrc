@@ -25,24 +25,15 @@ alias \
 	be="sudo brightnessctl set 12%" \
 	bq="sudo brightnessctl set 25%" \
 	black="sudo brightnessctl set 0%" \
-	gcommit="git commit -m "$(date +"%D %T")"" \
-	commit="git commit -m "$(date +"%D %T")"" \
-	sta="git status" \
-	add="git add -A" \
-	push="git push" \
-	pull="git pull" \
-	gg="add && commit && push" \
 	update="yay --noconfirm" \
 	view="sxiv" \
-	help="groff -mom ~/.local/src/dwm/barbs.mom -Tpdf | zathura -"
+	help="groff -mom ~/.local/src/dwm/barbs.mom -Tpdf | zathura -" \
+	hss="hugo server --noHTTPCache" \
 
-# vscode
-
-alias vscode='~/Applications/vs-code-insider/VSCode-linux-x64/code-insiders'
-
-# Local machines
+# appimages
 alias \
-	stride="ssh tim@192.168.0.175"
+	vscode='~/Applications/vs-code-insider/VSCode-linux-x64/code-insiders' \
+	obsidian='~/Applications/obsidian/Obsidian-1.5.3.AppImage'
 
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
@@ -97,4 +88,9 @@ alias \
 	magit="nvim -c MagitOnly" \
 	ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc" \
 	weath="less -S ${XDG_CACHE_HOME:-$HOME/.cache}/weatherreport" \
-# Watchers Check 1 2 3 4 5
+
+# cbonsai trees
+alias \
+        st-ephrem="cbonsai -li -w 12 -m \"O Lord and Master of my life, a spirit of idleness, despondency, ambition, and idle-talking, give me not, but rather a spirit of chastity, humble-mindedness, patience, and love bestow upon me Thy servant. Yea of O Lord King, grant me to see MY failings and not to condemn by brother for Blessed art Thou unto ages of ages. Amen.\"" \
+        theotokos="cbonsai -li -w 12 -m \"O my most holy lady Theotokos, through thy holy and all-powerful prayers, banish from me, thy lowly and wretched servant, DESPONDENCY, FORGETFULNESS, FOLLY, CARELESSNESS, and all FILTHY, EVIL, and BLASPHEMOUS THOUGHTS from my wretched heart and my darkened mind. AND quench the flame 🔥 of my passions, for I am poor and wretched, and DELIVER ME FROM MANY AND CRUEL MEMORIES AND DEEDS, and free me from their evil
+effects. For blessed art thou by all generations, and glorified is thy most honourable name unto the ages of ages. Amen.\""
