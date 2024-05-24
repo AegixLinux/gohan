@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# Ensure the script uses UTF-8 encoding
+export LANG=en_US.UTF-8
+
+# scs - Space Cryptographic Script
+
+# Create an array of cute-themed ASCII art
+space_art=(
+    "ଘ(੭ˊᵕˋ)੭* ✩‧₊˖⁺‧₊˚ ♡ ˚₊‧⁺˖₊˚ʚ ᗢ₊˚✧"
+    "☆ﾟ.*･｡ﾟ✧*｡･ﾟ*｡･ﾟ★ﾟ.*･｡ﾟ✧*｡･ﾟ*｡･ﾟ☆"
+    "(*^‿^*) ✿◠‿◠ ✿ ❀◕ ‿ ◕❀"
+    "(≧◡≦) ♡ (✿ ♥‿♥)"
+    "｡･:*:･ﾟ★,｡･:*:･ﾟ☆ ･:*:･ﾟ★,｡･:*:･ﾟ☆"
+    "✿◕ ‿ ◕✿ ✿◕ ‿ ◕✿ ✿◕ ‿ ◕✿"
+    "꒰･◡･๑꒱ ♡ ꒰･◡･๑꒱"
+    "(⁀ᗢ⁀)⁼³₌₃ (∩^o^)⊃━☆゜.*"
+    "✧･ﾟ: *✧･ﾟ:* \\(◕ヮ◕\\)/*:･ﾟ✧*:･ﾟ✧"
+    "｡*ﾟ+.*.｡(❁´◡\`❁)｡.｡:+*"
+    "☆ﾐ(o*･ω･)ﾉ ♡ ﾟ+｡:.ﾟ(⌒▽⌒)ﾉﾟ.:｡+ﾟ"
+    "♡ ～(\'▽^人) (o´▽\`o) (o´ω\`o)ﾉ"
+    "🌟 ✨ 🌙 ☀️ ⭐ 🌜 🌛 🌞 🌝 🌚 🌠 🌌"
+    "✧ ✪ ✯ ✵ ❇ ❈ ❅ ❄ ☾"
+)
+
+# Function to display art with some animation effect
+display_art() {
+    local art="$1"
+    local i=0
+    local delay=0.05
+
+    while [ $i -lt ${#art} ]; do
+        echo -n "${art:$i:1}"
+        sleep $delay
+        i=$((i + 1))
+    done
+    echo
+}
+
+# Choose a random piece of art from the array
+art="${space_art[$RANDOM % ${#space_art[@]}]}"
+
+display_art "I was unable to calm the undulating floor."
+
+display_art "$art"
+
+display_art "A portal to outer space has been opened... "
