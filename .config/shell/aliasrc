@@ -27,19 +27,15 @@ alias \
 	black="sudo brightnessctl set 0%" \
 	update="yay --noconfirm" \
 	view="sxiv" \
+	blowfish="hugo server --minify --theme blowfish" \
+	utc="date -u +\"%Y-%m-%d %H:%M:%S\"" \
+	aliasedit='sudo vim ~/.config/shell/aliasrc' \
+	aliasreload='source ~/.config/shell/aliasrc' \
+	dusch="du -sch * |sort -h" \
+	update="yay --noconfirm" \
+	view="sxiv" \
 	help="groff -mom ~/.local/src/dwm/barbs.mom -Tpdf | zathura -" \
 	hss="hugo server --noHTTPCache" \
-
-# appimages
-alias \
-	vscode='~/Applications/vs-code-insider/VSCode-linux-x64/code-insiders' \
-	obsidian='~/Applications/obsidian/Obsidian-1.5.3.AppImage'
-
-# Verbosity and settings that you pretty much just always are going to want.
-alias \
-	ll="ls -lsah" \
-	dock="sh ~/.screenlayout/dock.sh" \
-	undock="sh ~/.screenlayout/undock.sh" \
 	entropy="sudo dd if=/dev/sda1 of=/dev/null" \
 	cp="cp -iv" \
 	mv="mv -iv" \
@@ -49,27 +45,6 @@ alias \
 	yt="yt-dlp --embed-metadata -i" \
 	yta="yt -x -f bestaudio/best" \
 	ffmpeg="ffmpeg -hide_banner" \
-
-# Kino git aliases. Go into a local repo, make some changes, type "gg"
-# And you will have your changes pushed to remote with today's date as the comment
-alias \
-	commit="git commit -m \"\$(date +\"%D %T\")\"" \
-	sta='git status' \
-	add='git add -A' \
-	push='git push' \
-	pull='git pull' \
-	gg='add && commit && push' \
-
-# Colorize commands when possible.
-alias \
-	ls="ls -hN --color=auto --group-directories-first" \
-	grep="grep --color=auto" \
-	diff="diff --color=auto" \
-	ccat="highlight --out-format=ansi" \
-	ip="ip -color=auto"
-
-# These common commands are just too long! Abbreviate them.
-alias \
 	ka="killall" \
 	g="git" \
 	trem="transmission-remote" \
@@ -83,6 +58,29 @@ alias \
 	xq="xbps-query" \
 	z="zathura"
 
+# Wonderful git aliases. Go into a local repo, make some changes, type "gg"
+# And you will have your changes pushed to remote with today's date as the comment
+alias \
+	commit="git commit -m \"\$(date +\"%D %T\")\"" \
+	sta='git status' \
+	add='git add -A' \
+	push='git push' \
+	pull='git pull' \
+	gg='add && commit && push' \
+
+# appimages
+alias \
+	vscode='~/Applications/vs-code-insider/VSCode-linux-x64/code-insiders' \
+	obsidian='~/Applications/obsidian/Obsidian-1.5.3.AppImage'
+
+# Colorize commands when possible.
+alias \
+	ls="ls -hN --color=auto --group-directories-first" \
+	grep="grep --color=auto" \
+	diff="diff --color=auto" \
+	ccat="highlight --out-format=ansi" \
+	ip="ip -color=auto"
+
 alias \
 	lf="lfub" \
 	magit="nvim -c MagitOnly" \
@@ -94,3 +92,12 @@ alias \
         st-ephrem="cbonsai -li -w 12 -m \"O Lord and Master of my life, a spirit of idleness, despondency, ambition, and idle-talking, give me not, but rather a spirit of chastity, humble-mindedness, patience, and love bestow upon me Thy servant. Yea of O Lord King, grant me to see MY failings and not to condemn by brother for Blessed art Thou unto ages of ages. Amen.\"" \
         theotokos="cbonsai -li -w 12 -m \"O my most holy lady Theotokos, through thy holy and all-powerful prayers, banish from me, thy lowly and wretched servant, DESPONDENCY, FORGETFULNESS, FOLLY, CARELESSNESS, and all FILTHY, EVIL, and BLASPHEMOUS THOUGHTS from my wretched heart and my darkened mind. AND quench the flame 🔥 of my passions, for I am poor and wretched, and DELIVER ME FROM MANY AND CRUEL MEMORIES AND DEEDS, and free me from their evil
 effects. For blessed art thou by all generations, and glorified is thy most honourable name unto the ages of ages. Amen.\""
+
+# cbonsai trees
+alias \
+        st-ephrem="cbonsai -t 0.25 -li -w 30 -m \"O Lord and Master of my life, a spirit of idleness, despondency, ambition, and idle-talking, give me not, 🙇 but rather a spirit of chastity, humble-mindedness, patience, and love bestow upon me Thy servant. 🙇 Yea of O Lord King, grant me to see MY failings and not to condemn by brother for Blessed art Thou unto ages of ages. Amen. 🙇\"" \
+        theotokos="cbonsai -t 0.25 -li -w 30 -m \"O my most holy lady Theotokos, through thy holy and all-powerful prayers, banish from me, thy lowly and wretched servant, DESPONDENCY, FORGETFULNESS, FOLLY, CARELESSNESS, and all FILTHY, EVIL, and BLASPHEMOUS THOUGHTS from my wretched heart and my darkened mind. AND quench the flame 🔥 of my passions, for I am poor and wretched, and DELIVER ME FROM MANY AND CRUEL MEMORIES AND DEEDS, and free me from their evil effects. For blessed art thou by all generations, and glorified is thy most honourable name unto the ages of ages. Amen.\"" \
+        st-herman="cbonsai -t 0.25 -li -w 30 -m \"From this day, from this hour, from this minute, let us strive to love God above all, and fulfill His holy will. - ST. HERMAN OF ALASKA\""
+
+# cisco vpn
+alias vpn="sudo /opt/cisco/anyconnect/bin/vpnagentd && sudo /opt/cisco/anyconnect/bin/vpnui"
