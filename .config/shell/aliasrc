@@ -101,3 +101,4 @@ alias \
 
 # cisco vpn
 alias vpn="sudo /opt/cisco/anyconnect/bin/vpnagentd && sudo /opt/cisco/anyconnect/bin/vpnui"
+
