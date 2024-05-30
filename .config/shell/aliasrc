@@ -90,14 +90,14 @@ alias \
 # cbonsai trees
 alias \
         st-ephrem="cbonsai -li -w 12 -m \"O Lord and Master of my life, a spirit of idleness, despondency, ambition, and idle-talking, give me not, but rather a spirit of chastity, humble-mindedness, patience, and love bestow upon me Thy servant. Yea of O Lord King, grant me to see MY failings and not to condemn by brother for Blessed art Thou unto ages of ages. Amen.\"" \
-        theotokos="cbonsai -li -w 12 -m \"O my most holy lady Theotokos, through thy holy and all-powerful prayers, banish from me, thy lowly and wretched servant, DESPONDENCY, FORGETFULNESS, FOLLY, CARELESSNESS, and all FILTHY, EVIL, and BLASPHEMOUS THOUGHTS from my wretched heart and my darkened mind. AND quench the flame 🔥 of my passions, for I am poor and wretched, and DELIVER ME FROM MANY AND CRUEL MEMORIES AND DEEDS, and free me from their evil
-effects. For blessed art thou by all generations, and glorified is thy most honourable name unto the ages of ages. Amen.\""
+#         theotokos="cbonsai -li -w 12 -m \"O my most holy lady Theotokos, through thy holy and all-powerful prayers, banish from me, thy lowly and wretched servant, DESPONDENCY, FORGETFULNESS, FOLLY, CARELESSNESS, and all FILTHY, EVIL, and BLASPHEMOUS THOUGHTS from my wretched heart and my darkened mind. AND quench the flame 🔥 of my passions, for I am poor and wretched, and DELIVER ME FROM MANY AND CRUEL MEMORIES AND DEEDS, and free me from their evil
+# effects. For blessed art thou by all generations, and glorified is thy most honourable name unto the ages of ages. Amen.\""
 
 # cbonsai trees
 alias \
         st-ephrem="cbonsai -t 0.25 -li -w 30 -m \"O Lord and Master of my life, a spirit of idleness, despondency, ambition, and idle-talking, give me not, 🙇 but rather a spirit of chastity, humble-mindedness, patience, and love bestow upon me Thy servant. 🙇 Yea of O Lord King, grant me to see MY failings and not to condemn by brother for Blessed art Thou unto ages of ages. Amen. 🙇\"" \
-        theotokos="cbonsai -t 0.25 -li -w 30 -m \"O my most holy lady Theotokos, through thy holy and all-powerful prayers, banish from me, thy lowly and wretched servant, DESPONDENCY, FORGETFULNESS, FOLLY, CARELESSNESS, and all FILTHY, EVIL, and BLASPHEMOUS THOUGHTS from my wretched heart and my darkened mind. AND quench the flame 🔥 of my passions, for I am poor and wretched, and DELIVER ME FROM MANY AND CRUEL MEMORIES AND DEEDS, and free me from their evil effects. For blessed art thou by all generations, and glorified is thy most honourable name unto the ages of ages. Amen.\"" \
         st-herman="cbonsai -t 0.25 -li -w 30 -m \"From this day, from this hour, from this minute, let us strive to love God above all, and fulfill His holy will. - ST. HERMAN OF ALASKA\""
+#         theotokos="cbonsai -t 0.25 -li -w 30 -m \"O my most holy lady Theotokos, through thy holy and all-powerful prayers, banish from me, thy lowly and wretched servant, DESPONDENCY, FORGETFULNESS, FOLLY, CARELESSNESS, and all FILTHY, EVIL, and BLASPHEMOUS THOUGHTS from my wretched heart and my darkened mind. AND quench the flame 🔥 of my passions, for I am poor and wretched, and DELIVER ME FROM MANY AND CRUEL MEMORIES AND DEEDS, and free me from their evil effects. For blessed art thou by all generations, and glorified is thy most honourable name unto the ages of ages. Amen.\"" \
 
 # cisco vpn
 alias vpn="sudo /opt/cisco/anyconnect/bin/vpnagentd && sudo /opt/cisco/anyconnect/bin/vpnui"
