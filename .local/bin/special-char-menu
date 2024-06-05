@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Path to the special_chars file in barbs
+CHAR_FILE="$HOME/.local/share/barbs/chars/special_chars"
+
+# prompt that user sees in the dmenu
+CHAR=$(cat "$CHAR_FILE" | dmenu -p "Select special character:")
+
+# Once char is selected, copy & paste in one go
+if [ -n "$CHAR" ]; then
+    echo -n "$CHAR" | xclip -selection clipboard
+    xdotool key --clearmodifiers Shift+Insert
+fi
+EOF
+
+chmod +x ~/.local/bin/special-char-menu
