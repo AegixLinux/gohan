@@ -10,5 +10,3 @@ CHAR=$(cat "$CHAR_FILE" | dmenu -p "Select special character:")
 if [ -n "$CHAR" ]; then
     echo -n "$CHAR" | xclip -selection clipboard
 fi
-
-chmod +x ~/.local/bin/special-char-menu
