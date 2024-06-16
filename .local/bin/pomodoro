@@ -31,9 +31,19 @@ while [ $time -gt 0 ]; do
   sleep 1
 done
 
+echo "DING.. the pomodoro timer has expired."
+echo "╔══════════════════════════════════╗"
+echo "║                                  ║"
+echo "║      🍅  Time's up! 🍅           ║"
+echo "║                                  ║"
+echo "╚══════════════════════════════════╝"
+sleep 3
+
+
 # Play the sound file at the end of the countdown
 # mpg123 "$SOUND_FILE"  # Use mpg123, afplay, or aplay depending on your system
-mpg123 "$SOUND_FILE"
+mpg123 -o pulse "$SOUND_FILE"
+
 
 # Optional: Display a message when the timer ends
-echo "Time's up!"
+# echo "Time's up!"
