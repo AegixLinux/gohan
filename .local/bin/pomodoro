@@ -1,8 +1,26 @@
 #!/bin/sh
 
+# Function to print usage instructions
+print_usage() {
+  echo "Usage: pomodoro <countdown time in minutes>"
+  echo ""
+  echo "This script starts a countdown timer for the specified number of minutes."
+  echo "You must provide the countdown time in minutes as an argument."
+  echo ""
+  echo "Example:"
+  echo "  pomodoro 25    # Starts a 25-minute countdown timer"
+  exit 1
+}
+
+# Check if an argument is provided
 if [ $# -eq 0 ]; then
-	echo "Usage: $0 <countdown time in minutes>"
-	exit 1
+  print_usage
+fi
+
+# Check if the argument is an integer
+if ! [ "$1" -eq "$1" ] 2> /dev/null; then
+  echo "Error: The argument must be an integer."
+  print_usage
 fi
 
 # Countdown time in minutes
@@ -39,11 +57,9 @@ echo "║                                  ║"
 echo "╚══════════════════════════════════╝"
 sleep 3
 
-
 # Play the sound file at the end of the countdown
 # mpg123 "$SOUND_FILE"  # Use mpg123, afplay, or aplay depending on your system
 mpg123 -o pulse "$SOUND_FILE"
-
 
 # Optional: Display a message when the timer ends
 # echo "Time's up!"
