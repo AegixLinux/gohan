@@ -2,29 +2,31 @@
 
 # Function to print usage instructions
 print_usage() {
-  echo "Usage: pomodoro <countdown time in minutes>"
+  echo "Usage: pomodoro [countdown time in minutes]"
   echo ""
   echo "This script starts a countdown timer for the specified number of minutes."
-  echo "You must provide the countdown time in minutes as an argument."
+  echo "If no time is provided, the default countdown time is 25 minutes."
   echo ""
-  echo "Example:"
-  echo "  pomodoro 25    # Starts a 25-minute countdown timer"
-  exit 1
+  echo "Examples:"
+  echo "  pomodoro        # Starts a 25-minute countdown timer"
+  echo "  pomodoro 15     # Starts a 15-minute countdown timer"
 }
+
+# Default countdown time in minutes
+DEFAULT_COUNTDOWN=25
 
 # Check if an argument is provided
 if [ $# -eq 0 ]; then
-  print_usage
+  COUNTDOWN=$DEFAULT_COUNTDOWN
+else
+  # Check if the argument is an integer
+  if ! [ "$1" -eq "$1" ] 2> /dev/null; then
+    echo "Error: The argument must be an integer."
+    print_usage
+    exit 1
+  fi
+  COUNTDOWN=$1
 fi
-
-# Check if the argument is an integer
-if ! [ "$1" -eq "$1" ] 2> /dev/null; then
-  echo "Error: The argument must be an integer."
-  print_usage
-fi
-
-# Countdown time in minutes
-COUNTDOWN=$1
 
 # Convert minutes to seconds
 let "time=COUNTDOWN * 60"
