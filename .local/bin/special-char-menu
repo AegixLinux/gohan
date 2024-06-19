@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Path to the special_chars file in barbs
-CHAR_FILE="$HOME/.local/share/barbs/chars/special_chars"
+CHAR_FILE="$HOME/.local/share/barbs/special_chars"
 
 # Prompt the user to select a character using dmenu
 CHAR=$(cat "$CHAR_FILE" | dmenu -p "Select special character:")
