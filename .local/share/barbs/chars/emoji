@@ -60,6 +60,9 @@
 🥶 cold face
 🥴 woozy face
 😵 face with crossed-out eyes
+🫨 shaking face
+🙂‍↔️ head shaking horizontally
+🙂‍↕️ head shaking vertically
 🤯 exploding head
 🤠 cowboy hat face
 🥳 partying face
@@ -254,16 +257,27 @@
 🫄 pregnant person
 🤱 breast-feeding
 👼 baby angel
+🧑‍🚀 astronaut
 🎅 Santa Claus
 🤶 Mrs. Claus
 🦸 superhero
 🦹 supervillain
 🧙 mage
+🧙‍♂️ man mage
+🧙‍♀️ woman mage
 🧚 fairy
+🧚‍♂️ man fairy
+🧚‍♀️ woman fairy
 🧛 vampire
 🧜 merperson
+🧜‍♂️ man merperson
+🧜‍♀️ woman merperson
 🧝 elf
+🧝‍♂️ man elf
+🧝‍♀️ woman elf
 🧞 genie
+🧞‍♂️ man genie
+🧞‍♀️ woman genie
 🧟 zombie
 🧌 troll
 💆 person getting massage
@@ -276,6 +290,8 @@
 🕺 man dancing
 🕴️ person in suit levitating
 👯 people with bunny ears
+👯‍♂️ men with bunny ears
+👯‍♀️ women with bunny ears
 🧖 person in steamy room
 🧗 person climbing
 🤺 person fencing
@@ -283,21 +299,51 @@
 ⛷️ skier
 🏂 snowboarder
 🏌️ person golfing
-🏄 person surfing
+🏌️‍♂️ man golfing
+🏌️‍♀️ woman golfing
 🚣 person rowing boat
+🚣‍♂️ man rowing boat
+🚣‍♀️ woman rowing boat
 🏊 person swimming
+🏊‍♂️ man swimming
+🏊‍♀️ woman swimming
 ⛹️ person bouncing ball
+⛹️‍♂️ man bouncing ball
+⛹️‍♀️ woman bouncing ball
 🏋️ person lifting weights
+🏋️‍♂️ man lifting weights
+🏋️‍♀️ woman lifting weights
 🚴 person biking
+🚴‍♂️ man biking
+🚴‍♀️ woman biking
 🚵 person mountain biking
+🚵‍♂️ man mountain biking
+🚵‍♀️ woman mountain biking
 🤸 person cartwheeling
+🤸‍♂️ man cartwheeling
+🤸‍♀️ woman cartwheeling
 🤼 people wrestling
+🤼‍♂️ men wrestling
+🤼‍♀️ women wrestling
 🤽 person playing water polo
+🤽‍♂️ man playing water polo
+🤽‍♀️ woman playing water polo
 🤾 person playing handball
+🤾‍♂️ man playing handball
+🤾‍♀️ woman playing handball
 🤹 person juggling
+🤹‍♂️ man juggling
+🤹‍♀️ woman juggling
 🧘 person in lotus position
+🧘‍♂️ man in lotus position
+🧘‍♀️ woman in lotus position
 🛀 person taking bath
 🛌 person in bed
+🏄‍♂️ man surfing
+🏄‍♀️ woman surfing
+🏄 person surfing
+🧗‍♂️ man climbing
+🧗‍♀️ woman climbing
 👭 women holding hands
 👫 woman and man holding hands
 👬 men holding hands
@@ -316,18 +362,22 @@
 🐶 dog face
 🐕 dog
 🦮 guide dog
+🐕‍🦺 service dog
 🐩 poodle
 🐺 wolf
 🦊 fox
 🦝 raccoon
 🐱 cat face
 🐈 cat
+🐈‍⬛ black cat
 🦁 lion
 🐯 tiger face
 🐅 tiger
 🐆 leopard
 🐴 horse face
 🐎 horse
+🫎 moose
+🫏 donkey
 🦄 unicorn
 🦓 zebra
 🦌 deer
@@ -364,6 +414,7 @@
 🐻 bear
 🐨 koala
 🐼 panda
+🦝 trashh panda
 🦥 sloth
 🦦 otter
 🦨 skunk
@@ -388,6 +439,10 @@
 🦩 flamingo
 🦚 peacock
 🦜 parrot
+🪽 wing
+🐦‍⬛ black bird
+🪿 goose
+🐦‍🔥 phoenix
 🐸 frog
 🐊 crocodile
 🐢 turtle
@@ -408,6 +463,7 @@
 🐙 octopus
 🐚 spiral shell
 🪸 coral
+🪼 jellyfish
 🐌 snail
 🦋 butterfly
 🐛 bug
@@ -435,6 +491,7 @@
 🌻 sunflower
 🌼 blossom
 🌷 tulip
+🪻 hyacinth
 🌱 seedling
 🪴 potted plant
 🌲 evergreen tree
@@ -455,6 +512,7 @@
 🍉 watermelon
 🍊 tangerine
 🍋 lemon
+🍋‍🟩 lime
 🍌 banana
 🍍 pineapple
 🥭 mango
@@ -482,9 +540,12 @@
 🧄 garlic
 🧅 onion
 🍄 mushroom
+🍄‍🟫 brown mushroom
+🫛 pea pod
 🥜 peanuts
 🫘 beans
 🌰 chestnut
+🫚 ginger root
 🍞 bread
 🥐 croissant
 🥖 baguette bread
@@ -958,6 +1019,8 @@
 🪕 banjo
 🥁 drum
 🪘 long drum
+🪇 maracas
+🪈 flute
 📱 mobile phone
 📲 mobile phone with arrow
 ☎️ telephone
@@ -1091,6 +1154,7 @@
 🦯 white cane
 🔗 link
 ⛓️ chains
+⛓️‍💥 broken chain
 🪝 hook
 🧰 toolbox
 🧲 magnet
@@ -1367,6 +1431,9 @@
 🎌 crossed flags
 🏴 black flag
 🏳️ white flag
+🏳️‍🌈 rainbow flag
+🏳️‍⚧️ transgender flag
+🏴‍☠️ pirate flag
 🇦🇨 flag: Ascension Island
 🇦🇩 flag: Andorra
 🇦🇪 flag: United Arab Emirates
