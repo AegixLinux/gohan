@@ -7,7 +7,7 @@ term_height=$(tput lines)
 # adjust message position to fit dynamically
 box_width=44
 box_height=18
-message_col=$((term_width - box_width - 1))  # space from the right edge
+message_col=$(( (term_width - box_width) / 2 ))  # center horizontally
 message_row=$(( (term_height - box_height) / 2 ))  # center vertically
 
 # generate the bonsai tree
@@ -15,10 +15,11 @@ message_row=$(( (term_height - box_height) / 2 ))  # center vertically
     cbonsai -t 0.25 -li -w 30 -m ""
 ) &
 
-sleep 1
+# add a trap to ensure the script exits cleanly with Ctrl+C
+trap 'tput cnorm; exit' INT
 
-# mmove cursor to calculated position and print out the prayer
-(
+# function to draw the prayer box
+draw_prayer_box() {
     tput cup $message_row $message_col
     echo "+------------------------------------------+"
     tput cup $((message_row + 1)) $message_col
@@ -53,6 +54,13 @@ sleep 1
     echo "| Amen.                                    |"
     tput cup $((message_row + 16)) $message_col
     echo "+------------------------------------------+"
-)
+}
 
-wait
+# some time for the bonsai to generate
+sleep 1
+
+# ensure the text box doesn't disappear & redraws continuously
+while true; do
+    draw_prayer_box
+    sleep 1
+done
