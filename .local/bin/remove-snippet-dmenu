@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Path to the snippets file
+SNIPPETS_FILE="$HOME/.local/share/barbs/snippets"
+
+# prompt the user for the snippet and the comment using dmenu
+snippet=$(echo | dmenu -p "Select a snippet to remove:")
+
+# Select a snippet using dmenu and remove trailing spaces
+chosen=$(grep -v '^#' "$SNIPPETS_FILE" | dmenu -i -l 50 | awk -F'#' '{print $1}' | sed 's/[[:blank:]]*$//')
+
+# Exit if none chosen
+[ -z "$chosen" ] && exit
+
+# Escape special characters in the chosen snippet
+escaped_snippet=$(echo "$chosen" | sed 's/[\/&]/\\&/g')
+
+# Remove the selected snippet (along with its comment)
+sed -i "\|$escaped_snippet #|d" "$SNIPPETS_FILE"
+
+# Notify the user
+notify-send "Snippet removed" "'$chosen' has been removed from snippets."
