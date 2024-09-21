@@ -2,12 +2,12 @@
 
 # ##### This script provides a menu to select a special character from a list of special characters in the terminal. #####
 
-# Path to the symbols file
-SYMBOLS_FILE="$HOME/.local/share/barbs/symbols"
+# Path to the special characters file
+SPECIAL_CHARACTERS_FILE="$HOME/.local/share/barbs/chars/special-characters/special-chars"
 
-# Display the list of symbols with numbering
+# Display the list of special characters with numbering
 echo "Select a special character to copy to the clipboard:"
-grep -v '^#' "$SYMBOLS_FILE" | awk -F'#' '{printf "%d) %s # %s\n", NR, $1, $2}'
+grep -v '^#' "$SPECIAL_CHARACTERS_FILE" | awk -F'#' '{printf "%d) %s # %s\n", NR, $1, $2}'
 
 # Prompt the user to enter a number
 echo "Enter the number of the special character to copy:"
@@ -16,15 +16,15 @@ read number
 # Exit if no input or invalid input
 [ -z "$number" ] && echo "No special character selected." && exit 1
 
-# Get the chosen symbol
-chosen=$(grep -v '^#' "$SYMBOLS_FILE" | awk -v num="$number" -F'#' 'NR == num {print $1}' | sed 's/[[:blank:]]*$//')
+# Get the chosen special character
+chosen=$(grep -v '^#' "$SPECIAL_CHARACTERS_FILE" | awk -v num="$number" -F'#' 'NR == num {print $1}' | sed 's/[[:blank:]]*$//')
 
-# Exit if the chosen symbol is empty
+# Exit if the chosen special character is empty
 [ -z "$chosen" ] && echo "Invalid selection." && exit 1
 
-# Copy the symbol to the clipboard
+# Copy the special character to the clipboard
 echo -n "$chosen" | xclip -selection clipboard
 
-# Notify the user that the symbol has been copied
+# Notify the user that the special character has been copied
 echo "Special character copied: '$chosen'"
 notify-send "Special character copied" "'$chosen' copied to clipboard."
