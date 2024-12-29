@@ -100,5 +100,5 @@ alias \
 #         theotokos="cbonsai -t 0.25 -li -w 30 -m \"O my most holy lady Theotokos, through thy holy and all-powerful prayers, banish from me, thy lowly and wretched servant, DESPONDENCY, FORGETFULNESS, FOLLY, CARELESSNESS, and all FILTHY, EVIL, and BLASPHEMOUS THOUGHTS from my wretched heart and my darkened mind. AND quench the flame 🔥 of my passions, for I am poor and wretched, and DELIVER ME FROM MANY AND CRUEL MEMORIES AND DEEDS, and free me from their evil effects. For blessed art thou by all generations, and glorified is thy most honourable name unto the ages of ages. Amen.\"" \
 
 # cisco vpn
-alias vpn="sudo /opt/cisco/anyconnect/bin/vpnagentd && sudo /opt/cisco/anyconnect/bin/vpnui"
+alias vpn="sudo /opt/cisco/secureclient/bin/vpnagentd && sudo -E env WEBKIT_DISABLE_COMPOSITING_MODE=1 WEBKIT_DISABLE_ACCELERATED_2D_CANVAS=1 /opt/cisco/secureclient/bin/vpnui"
 
