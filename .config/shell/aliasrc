@@ -25,7 +25,7 @@ alias \
 	be="sudo brightnessctl set 12%" \
 	bq="sudo brightnessctl set 25%" \
 	black="sudo brightnessctl set 0%" \
-	update="yay --noconfirm" \
+	update="sudo pacman -Syu --noconfirm && yay --noconfirm" \
 	view="sxiv" \
 	blowfish="hugo server --minify --theme blowfish" \
 	utc="date -u +\"%Y-%m-%d %H:%M:%S\"" \
