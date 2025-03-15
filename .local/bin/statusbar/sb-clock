@@ -1,29 +1,42 @@
 #!/bin/sh
 
-clock=$(date '+%I')
+# Get hour in 24-hour format for icon selection
+hour=$(date '+%H')
+# Convert 24-hour to 12-hour format for icon selection (needed for emoji clock)
+clock=$(( hour % 12 ))
+# If hour is 0 (in 12-hour format), set it to 12
+if [ "$clock" = "0" ]; then
+    clock=12
+fi
 
+# Format clock value to ensure it has leading zero if needed
+clock=$(printf "%02d" "$clock")
+
+# Select the appropriate clock emoji based on the 12-hour clock value
 case "$clock" in
-	"00") icon="🕛" ;;
-	"01") icon="🕐" ;;
-	"02") icon="🕑" ;;
-	"03") icon="🕒" ;;
-	"04") icon="🕓" ;;
-	"05") icon="🕔" ;;
-	"06") icon="🕕" ;;
-	"07") icon="🕖" ;;
-	"08") icon="🕗" ;;
-	"09") icon="🕘" ;;
-	"10") icon="🕙" ;;
-	"11") icon="🕚" ;;
-	"12") icon="🕛" ;;
+        "12") icon="🕛" ;;
+        "01") icon="🕐" ;;
+        "02") icon="🕑" ;;
+        "03") icon="🕒" ;;
+        "04") icon="🕓" ;;
+        "05") icon="🕔" ;;
+        "06") icon="🕕" ;;
+        "07") icon="🕖" ;;
+        "08") icon="🕗" ;;
+        "09") icon="🕘" ;;
+        "10") icon="🕙" ;;
+        "11") icon="🕚" ;;
 esac
 
 case $BLOCK_BUTTON in
-	1) notify-send "This Month" "$(cal --color=always | sed "s/..7m/<b><span color=\"red\">/;s|..27m|</span></b>|")" && notify-send "Appointments" "$(calcurse -d3)" ;;
-	2) setsid -f "$TERMINAL" -e calcurse ;;
-	3) notify-send "📅 Time/date module" "\- Left click to show upcoming appointments for the next three days via \`calcurse -d3\` and show the month via \`cal\`
+        #1) notify-send "$(cal | sed "s/\<$(date +%d)\>/\<span color='#BA8743'><b>&<\/b><\/span>/")" ;;
+        1) notify-send "જ⁀➴ The Month of 𓅰"  "$(cal | sed "s/\<$(date +%d)\>/\<span color='#BA8743'><b>&<\/b><\/span>/")" ;;
+        2) setsid -f "$TERMINAL" -e calcurse ;;
+        3) notify-send "📅 Time/date module" "\- Left click to show upcoming appointments for the next three days via \`calcurse -d3\` and show the month via \`cal\`
 - Middle click opens calcurse if installed" ;;
-	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+        6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-date "+%Y %b %d (%a) $icon%I:%M%p"
+# Display the date and time in 24-hour format
+date "+%Y-%m-%d %a $icon %H:%M"
+
