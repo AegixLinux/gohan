@@ -53,9 +53,6 @@ alias \
 	e="$EDITOR" \
 	v="$EDITOR" \
 	p="pacman" \
-	xi="sudo xbps-install" \
-	xr="sudo xbps-remove -R" \
-	xq="xbps-query" \
 	z="zathura"
 
 # Wonderful git aliases. Go into a local repo, make some changes, type "gg"
