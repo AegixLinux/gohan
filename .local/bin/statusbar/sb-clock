@@ -1,20 +1,9 @@
 #!/bin/sh
 
-# Get hour in 24-hour format for icon selection
-hour=$(date '+%H')
-# Convert 24-hour to 12-hour format for icon selection (needed for emoji clock)
-clock=$(( hour % 12 ))
-# If hour is 0 (in 12-hour format), set it to 12
-if [ "$clock" = "0" ]; then
-    clock=12
-fi
+clock=$(date '+%I')
 
-# Format clock value to ensure it has leading zero if needed
-clock=$(printf "%02d" "$clock")
-
-# Select the appropriate clock emoji based on the 12-hour clock value
 case "$clock" in
-        "12") icon="🕛" ;;
+        "00") icon="🕛" ;;
         "01") icon="🕐" ;;
         "02") icon="🕑" ;;
         "03") icon="🕒" ;;
@@ -26,6 +15,7 @@ case "$clock" in
         "09") icon="🕘" ;;
         "10") icon="🕙" ;;
         "11") icon="🕚" ;;
+        "12") icon="🕛" ;;
 esac
 
 case $BLOCK_BUTTON in
@@ -39,4 +29,3 @@ esac
 
 # Display the date and time in 24-hour format
 date "+%Y-%m-%d %a $icon %H:%M"
-

@@ -10,3 +10,4 @@
 .config/shell/watchers-test-1
 .config/shell/zshnameddirrc
 .config/zsh/.zcompdump*
+.local/bin/CLAUDE.md
