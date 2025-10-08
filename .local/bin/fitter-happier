@@ -1,0 +1,101 @@
+#!/bin/bash
+# fitter-happier - Vintage robotic text-to-speech reader
+# Named after the Radiohead track that uses similar TTS
+#
+# Dependencies:
+#   - espeak-ng (text-to-speech synthesizer)
+#   - pcaudiolib (audio output library)
+#   - libsonic (audio processing)
+#
+# Install on Arch-based systems:
+#   sudo pacman -S espeak-ng
+#
+# Usage: fitter-happier <file> [variant]
+
+show_help() {
+    cat << EOF
+fitter-happier - Vintage Robotic TTS Reader
+
+Usage: fitter-happier <file> [variant]
+
+Variants:
+  1 - Classic Robot (slow, low pitch) [s=140, p=30]
+  2 - Vintage Apple (medium, slightly low) [s=160, p=40] [DEFAULT]
+  3 - Fast Robot (faster, monotone) [s=180, p=35]
+  4 - Deep Machine (slow, very low) [s=130, p=20]
+
+Examples:
+  fitter-happier document.md 2
+  fitter-happier notes.txt 4
+  fitter-happier script.sh     # Uses variant 2 by default
+
+EOF
+}
+
+# Check for espeak-ng
+if ! command -v espeak-ng &> /dev/null; then
+    echo "Error: espeak-ng not found"
+    echo "Install with: sudo pacman -S espeak-ng"
+    exit 1
+fi
+
+# Check for help flag
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help
+    exit 0
+fi
+
+# Check if file argument provided
+if [[ -z "$1" ]]; then
+    echo "Error: No file specified"
+    show_help
+    exit 1
+fi
+
+FILE="$1"
+VARIANT="${2:-2}"  # Default to variant 2 (Vintage Apple)
+
+# Check if file exists
+if [[ ! -f "$FILE" ]]; then
+    echo "Error: File '$FILE' not found"
+    exit 1
+fi
+
+# Set voice parameters based on variant
+case "$VARIANT" in
+    1)
+        SPEED=140
+        PITCH=30
+        echo "🤖 Classic Robot mode"
+        ;;
+    2)
+        SPEED=160
+        PITCH=40
+        echo "🍎 Vintage Apple mode"
+        ;;
+    3)
+        SPEED=180
+        PITCH=35
+        echo "⚡ Fast Robot mode"
+        ;;
+    4)
+        SPEED=130
+        PITCH=20
+        echo "🔊 Deep Machine mode"
+        ;;
+    *)
+        echo "Error: Invalid variant '$VARIANT'. Must be 1-4."
+        show_help
+        exit 1
+        ;;
+esac
+
+# Clean markdown and read the file
+sed 's/^#\+\s*//g' "$FILE" | \
+sed 's/\*\*//g' | \
+sed 's/__//g' | \
+sed 's/`//g' | \
+sed 's/\[//g' | \
+sed 's/\]//g' | \
+sed '/^$/d' | \
+espeak-ng -v en-us -s "$SPEED" -p "$PITCH"
