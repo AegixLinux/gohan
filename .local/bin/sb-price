@@ -26,15 +26,14 @@ updateprice() { temp="$(mktemp)"
 	updateprice "$1"
 
 case $BLOCK_BUTTON in
-	1) setsid "$TERMINAL" -e less -Srf "$chartfile" ;;
-	2) notify-send -u low "$3 Updating..." "Updating $2 price..."
+	1) notify-send -u low "$3 Updating..." "Updating $2 price..."
 		updateprice "$1" && notify-send "$3 Update complete." "$2 price is now
 \$$(cat "$pricefile")" ;;
+	2) setsid -f st -e less -Srf "$chartfile" ;;
 	3) uptime="$(date -d "$(stat -c %x "$pricefile")" '+%D at %T' | sed "s|$(date '+%D')|Today|")"
 		notify-send "$3 $2 module" "\- <b>Exact price: \$$(cat "$pricefile")</b>
-- Left click for chart of changes.
-- Middle click to update.
-- Shows 🔃 if updating prices.
+- Left click to update price.
+- Middle click for 2-week chart.
 - <b>Last updated:
 	$uptime</b>" ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
@@ -47,4 +46,4 @@ case "$currency" in
 	btc) symb="₿" ;;
 esac
 
-printf "$3$symb%0.2f$after" "$(cat "$pricefile")"
+printf "$3$symb%.0f$after" "$(cat "$pricefile")"
