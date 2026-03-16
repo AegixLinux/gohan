@@ -1,0 +1,6 @@
+#!/bin/sh
+# st with tabs (using tabbed)
+# Ctrl+Shift+Enter = new tab
+# Ctrl+Shift+h/l = prev/next tab
+# Ctrl+q = close tab
+exec tabbed -c st -w
