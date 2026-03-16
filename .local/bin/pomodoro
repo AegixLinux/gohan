@@ -54,7 +54,7 @@ done
 echo "DING.. the pomodoro timer has expired."
 echo "╔══════════════════════════════════╗"
 echo "║                                  ║"
-echo "║      🍅  Time's up! 🍅           ║"
+echo "║    🍅  Time's up! 🍅             ║"
 echo "║                                  ║"
 echo "╚══════════════════════════════════╝"
 sleep 3
