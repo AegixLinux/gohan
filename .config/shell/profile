@@ -1,14 +1,21 @@
-#!/bin/zsh
+#!/bin/sh
 
 # profile file. Runs on login. Environmental variables are set here.
 
 # If you don't plan on reverting to bash, you can remove the link in ~/.profile
 # to clean up.
 
-# Adds `~/.local/bin` to $PATH
-export PATH="${$(find ~/.local/bin -type d -printf %p:)%%:}:$PATH"
+# Adds `~/.local/bin` to $PATH (POSIX-compatible)
+for dir in $(find ~/.local/bin -type d 2>/dev/null); do
+	case ":$PATH:" in
+		*":$dir:"*) ;;
+		*) PATH="$dir:$PATH" ;;
+	esac
+done
+export PATH
 
-unsetopt PROMPT_SP
+# zsh-specific options (ignored by other shells)
+[ -n "$ZSH_VERSION" ] && unsetopt PROMPT_SP 2>/dev/null
 
 # Default programs:
 export EDITOR="nvim"
@@ -45,13 +52,13 @@ export DICS="/usr/share/stardict/dic/"
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 export LESS=-R
-export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
-export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
-export LESS_TERMCAP_me="$(printf '%b' '[0m')"
-export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
-export LESS_TERMCAP_se="$(printf '%b' '[0m')"
-export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
-export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
+export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
+export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
+export LESS_TERMCAP_me="$(printf '%b' '[0m')"
+export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
+export LESS_TERMCAP_se="$(printf '%b' '[0m')"
+export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
+export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export QT_QPA_PLATFORMTHEME="gtk2" # Have QT use gtk2 theme.
 export MOZ_USE_XINPUT2="1" # Mozilla smooth scrolling/touchpads.
