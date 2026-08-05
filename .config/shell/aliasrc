@@ -13,6 +13,10 @@ done; unset command
 
 se() { cd ~/.local/bin; $EDITOR $(fzf) ;}
 
+# Cyphertext Alcove - encrypted vault commands
+alias alcove="gocryptfs ~/CyphertextAlcove ~/AlcoveVault && cd ~/AlcoveVault"
+alias unalcove="cd ~ && fusermount -u ~/AlcoveVault"
+
 # aegix
 alias \
 	ll="ls -lsah" \
@@ -27,15 +31,16 @@ alias \
 	black="sudo brightnessctl set 0%" \
 	update="sudo pacman -Syu --noconfirm && yay --noconfirm" \
 	view="sxiv" \
+	help="groff -mom ~/.local/src/dwm/barbs.mom -Tpdf | zathura -" \
 	blowfish="hugo server --minify --theme blowfish" \
+	hss="hugo server --noHTTPCache" \
 	utc="date -u +\"%Y-%m-%d %H:%M:%S\"" \
 	aliasedit='sudo vim ~/.config/shell/aliasrc' \
 	aliasreload='source ~/.config/shell/aliasrc' \
-	dusch="du -sch * |sort -h" \
-	update="yay --noconfirm" \
-	view="sxiv" \
-	help="groff -mom ~/.local/src/dwm/barbs.mom -Tpdf | zathura -" \
-	hss="hugo server --noHTTPCache" \
+	dusch="du -sch * |sort -h"
+
+# Verbosity and settings that you pretty much just always are going to want.
+alias \
 	entropy="sudo dd if=/dev/sda1 of=/dev/null" \
 	cp="cp -iv" \
 	mv="mv -iv" \
@@ -44,18 +49,9 @@ alias \
 	mkd="mkdir -pv" \
 	yt="yt-dlp --embed-metadata -i" \
 	yta="yt -x -f bestaudio/best" \
-	ffmpeg="ffmpeg -hide_banner" \
-	ka="killall" \
-	g="git" \
-	trem="transmission-remote" \
-	YT="youtube-viewer" \
-	sdn="shutdown -h now" \
-	e="$EDITOR" \
-	v="$EDITOR" \
-	p="pacman" \
-	z="zathura"
+	ffmpeg="ffmpeg -hide_banner"
 
-# Wonderful git aliases. Go into a local repo, make some changes, type "gg"
+# kino git aliases. Go into a local repo, make some changes, type "gg"
 # And you will have your changes pushed to remote with today's date as the comment
 alias \
 	commit="git commit -m \"\$(date +\"%D %T\")\"" \
@@ -63,12 +59,7 @@ alias \
 	add='git add -A' \
 	push='git push' \
 	pull='git pull' \
-	gg='add && commit && push' \
-
-# appimages
-alias \
-	vscode='~/Applications/vs-code-insider/VSCode-linux-x64/code-insiders' \
-	obsidian='~/Applications/obsidian/Obsidian-1.5.3.AppImage'
+	gg='add && commit && push'
 
 # Colorize commands when possible.
 alias \
@@ -78,24 +69,34 @@ alias \
 	ccat="highlight --out-format=ansi" \
 	ip="ip -color=auto"
 
+# These common commands are just too long! Abbreviate them.
 alias \
+	ka="killall" \
+	g="git" \
+	trem="transmission-remote" \
+	YT="youtube-viewer" \
+	sdn="shutdown -h now" \
+	e="$EDITOR" \
+	v="$EDITOR" \
+	p="pacman" \
+	xi="sudo xbps-install" \
+	xr="sudo xbps-remove -R" \
+	xq="xbps-query" \
+	z="zathura" \
+	bravo="brave --disable-gpu --disable-software-rasterizer"
+
+alias \
+	n="ncd" \
 	lf="lfub" \
 	magit="nvim -c MagitOnly" \
 	ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc" \
-	weath="less -S ${XDG_CACHE_HOME:-$HOME/.cache}/weatherreport" \
+	weath="less -S ${XDG_CACHE_HOME:-$HOME/.cache}/weatherreport"
+# Watchers Check 1 2 3 4 5
 
 # cbonsai trees
 alias \
-        st-ephrem="cbonsai -li -w 12 -m \"O Lord and Master of my life, a spirit of idleness, despondency, ambition, and idle-talking, give me not, but rather a spirit of chastity, humble-mindedness, patience, and love bestow upon me Thy servant. Yea of O Lord King, grant me to see MY failings and not to condemn by brother for Blessed art Thou unto ages of ages. Amen.\"" \
-#         theotokos="cbonsai -li -w 12 -m \"O my most holy lady Theotokos, through thy holy and all-powerful prayers, banish from me, thy lowly and wretched servant, DESPONDENCY, FORGETFULNESS, FOLLY, CARELESSNESS, and all FILTHY, EVIL, and BLASPHEMOUS THOUGHTS from my wretched heart and my darkened mind. AND quench the flame 🔥 of my passions, for I am poor and wretched, and DELIVER ME FROM MANY AND CRUEL MEMORIES AND DEEDS, and free me from their evil
-# effects. For blessed art thou by all generations, and glorified is thy most honourable name unto the ages of ages. Amen.\""
-
-# cbonsai trees
-alias \
-        st-ephrem="cbonsai -t 0.25 -li -w 30 -m \"O Lord and Master of my life, a spirit of idleness, despondency, ambition, and idle-talking, give me not, 🙇 but rather a spirit of chastity, humble-mindedness, patience, and love bestow upon me Thy servant. 🙇 Yea of O Lord King, grant me to see MY failings and not to condemn by brother for Blessed art Thou unto ages of ages. Amen. 🙇\"" \
-        st-herman="cbonsai -t 0.25 -li -w 30 -m \"From this day, from this hour, from this minute, let us strive to love God above all, and fulfill His holy will. - ST. HERMAN OF ALASKA\""
-#         theotokos="cbonsai -t 0.25 -li -w 30 -m \"O my most holy lady Theotokos, through thy holy and all-powerful prayers, banish from me, thy lowly and wretched servant, DESPONDENCY, FORGETFULNESS, FOLLY, CARELESSNESS, and all FILTHY, EVIL, and BLASPHEMOUS THOUGHTS from my wretched heart and my darkened mind. AND quench the flame 🔥 of my passions, for I am poor and wretched, and DELIVER ME FROM MANY AND CRUEL MEMORIES AND DEEDS, and free me from their evil effects. For blessed art thou by all generations, and glorified is thy most honourable name unto the ages of ages. Amen.\"" \
+	st-ephrem="cbonsai -t 0.25 -li -w 30 -m \"O Lord and Master of my life, a spirit of idleness, despondency, ambition, and idle-talking, give me not, 🙇 but rather a spirit of chastity, humble-mindedness, patience, and love bestow upon me Thy servant. 🙇 Yea of O Lord King, grant me to see MY failings and not to condemn by brother for Blessed art Thou unto ages of ages. Amen. 🙇\"" \
+	st-herman="cbonsai -t 0.25 -li -w 30 -m \"From this day, from this hour, from this minute, let us strive to love God above all, and fulfill His holy will. - ST. HERMAN OF ALASKA\""
 
 # cisco vpn
-alias vpn="sudo /opt/cisco/secureclient/bin/vpnagentd && sudo -E env WEBKIT_DISABLE_COMPOSITING_MODE=1 WEBKIT_DISABLE_ACCELERATED_2D_CANVAS=1 /opt/cisco/secureclient/bin/vpnui"
-
+alias vpn='sudo /opt/cisco/secureclient/bin/vpnagentd && sudo -E env WEBKIT_DISABLE_COMPOSITING_MODE=1 WEBKIT_DISABLE_ACCELERATED_2D_CANVAS=1 /opt/cisco/secureclient/bin/vpnui'

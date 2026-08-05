@@ -1,0 +1,315 @@
+#!/bin/bash
+# speed — network signal analyzer
+# vintage hi-fi aesthetic, zero dependencies except curl + ping
+
+# ── colors ──────────────────────────────────────────
+R='\033[0m'
+DIM='\033[2m'
+BOLD='\033[1m'
+RED='\033[1;31m'
+YEL='\033[1;33m'
+GRN='\033[1;32m'
+CYN='\033[1;36m'
+WHT='\033[1;37m'
+AMBER='\033[38;5;214m'
+DAMBER='\033[38;5;172m'
+WARM='\033[38;5;223m'
+DGRN='\033[38;5;28m'
+
+# ── layout ──────────────────────────────────────────
+BW=57                        # inner width between border chars
+RCOL=$(( 2 + 1 + BW + 1 ))  # column for right border
+
+# ── VU meter bar ────────────────────────────────────
+vu_bar() {
+    local val="$1" max="$2" width=36
+    local num="${val%%.*}"
+    [ -z "$num" ] && num=0
+    local filled=$(( num * width / max ))
+    [ "$filled" -gt "$width" ] && filled=$width
+    local empty=$(( width - filled ))
+
+    # VU meter: green 0-60%, yellow 60-80%, red 80-100%
+    local green_end=$(( width * 60 / 100 ))
+    local yellow_end=$(( width * 80 / 100 ))
+
+    printf "   ${DIM}▐${R}"
+    for ((i=0; i<filled; i++)); do
+        if   [ $i -lt $green_end ]; then
+            printf "${GRN}█"
+        elif [ $i -lt $yellow_end ]; then
+            printf "${YEL}█"
+        else
+            printf "${RED}█"
+        fi
+    done
+    printf "${R}"
+    for ((i=0; i<empty; i++)); do printf "${DIM}░${R}"; done
+    printf "${DIM}▌${R}"
+
+    # peak indicator
+    if [ "$filled" -gt 0 ]; then
+        local peak_pct=$(( filled * 100 / width ))
+        if [ "$peak_pct" -ge 80 ]; then
+            printf "  ${RED}${BOLD}▪ PEAK${R}"
+        elif [ "$peak_pct" -ge 60 ]; then
+            printf "  ${YEL}▪ HOT${R}"
+        fi
+    fi
+}
+
+# ── speed rating ────────────────────────────────────
+rate_speed() {
+    local val="$1"
+    local num="${val%% *}"
+    local int_part="${num%%.*}"
+    [ -z "$int_part" ] && int_part=0
+
+    if   [ "$int_part" -ge 100 ]; then
+        echo -e "${GRN}${BOLD}${val}${R}  ${GRN}full headroom${R}"
+    elif [ "$int_part" -ge 50 ]; then
+        echo -e "${GRN}${val}${R}  ${GRN}warm signal${R}"
+    elif [ "$int_part" -ge 25 ]; then
+        echo -e "${CYN}${val}${R}  ${CYN}nominal${R}"
+    elif [ "$int_part" -ge 10 ]; then
+        echo -e "${YEL}${val}${R}  ${YEL}low gain${R}"
+    elif [ "$int_part" -ge 1 ]; then
+        echo -e "${RED}${val}${R}  ${RED}noise floor${R}"
+    else
+        echo -e "${RED}${BOLD}${val}${R}  ${RED}dead channel${R}"
+    fi
+}
+
+rate_ping() {
+    local val="$1"
+    local num="${val%% *}"
+    local int_part="${num%%.*}"
+    [ -z "$int_part" ] && int_part=0
+
+    if   [ "$int_part" -le 20 ]; then
+        echo -e "${GRN}${BOLD}${val}${R}  ${GRN}zero latency${R}"
+    elif [ "$int_part" -le 50 ]; then
+        echo -e "${CYN}${val}${R}  ${CYN}clean signal${R}"
+    elif [ "$int_part" -le 100 ]; then
+        echo -e "${YEL}${val}${R}  ${YEL}minor artifacts${R}"
+    elif [ "$int_part" -le 500 ]; then
+        echo -e "${RED}${val}${R}  ${RED}clipping${R}"
+    else
+        echo -e "${RED}${BOLD}${val}${R}  ${RED}dead channel${R}"
+    fi
+}
+
+# ── decorative elements ─────────────────────────────
+# double-line border (faceplate)
+dline() {
+    local lc="$1" rc="$2"
+    printf "  %b" "$lc"
+    printf "${AMBER}"
+    for ((i=0; i<BW; i++)); do printf "═"; done
+    printf "%b%b\n" "$R" "$rc"
+}
+
+# single-line section header
+section_top() {
+    local label="$1"
+    local label_len=${#label}
+    local remaining=$(( BW - label_len - 3 ))  # 3 = "─ " before label + " " after
+    printf "  ${DAMBER}┌─${R} ${AMBER}${BOLD}%s${R} " "$label"
+    printf "${DAMBER}"
+    for ((i=0; i<remaining; i++)); do printf "─"; done
+    printf "┐${R}\n"
+}
+
+section_line() {
+    printf "  ${DAMBER}│${R}"
+    printf "%b" "$1"
+    printf "\033[${RCOL}G${DAMBER}│${R}\n"
+}
+
+section_bot() {
+    printf "  ${DAMBER}└"
+    for ((i=0; i<BW; i++)); do printf "─"; done
+    printf "┘${R}\n"
+}
+
+# faceplate content line
+fp_line() {
+    printf "  ${AMBER}║${R}"
+    printf "%b" "$1"
+    printf "\033[${RCOL}G${AMBER}║${R}\n"
+}
+
+# thin separator line
+sep() {
+    printf "    ${DIM}${DAMBER}"
+    for ((i=0; i<BW-4; i++)); do printf "─"; done
+    printf "${R}\n"
+}
+
+# ── spinner ─────────────────────────────────────────
+clear_line='\033[2K'
+spin_frames=("·" ":" "·" ":")
+spin_msg() {
+    local pid=$1 msg="$2" i=0
+    while kill -0 "$pid" 2>/dev/null; do
+        local idx=$((i % 4))
+        printf "\r  ${AMBER}${spin_frames[$idx]}${R} ${DIM}%s${R}" "$msg"
+        sleep 0.15
+        i=$((i + 1))
+    done
+    printf "\r${clear_line}"
+}
+
+# ── header ──────────────────────────────────────────
+echo ""
+dline "${AMBER}╔" "${AMBER}╗"
+fp_line "  ${WARM}${BOLD}zero-dependency network test${R}"
+dline "${AMBER}╚" "${AMBER}╝"
+sep
+echo ""
+
+# ── test targets ────────────────────────────────────
+DOWNLOAD_URLS=(
+    "https://speed.cloudflare.com/__down?bytes=10000000"
+    "https://link.testfile.org/10MB"
+    "http://speedtest.tele2.net/10MB.zip"
+)
+UPLOAD_URL="https://speed.cloudflare.com/__up"
+PING_TARGET="1.1.1.1"
+
+# ═══════════════════════════════════════════════════
+# PHASE 1: PING
+# ═══════════════════════════════════════════════════
+ping_tmp=$(mktemp)
+ping -c 4 -W 5 "$PING_TARGET" > "$ping_tmp" 2>&1 &
+pid=$!
+spin_msg $pid "measuring latency..."
+wait $pid
+ping_exit=$?
+
+if [ $ping_exit -eq 0 ]; then
+    ping_avg=$(tail -1 "$ping_tmp" | awk -F'/' '{print $5}')
+    ping_val="${ping_avg} ms"
+else
+    ping_val="timeout"
+    ping_avg="9999"
+fi
+rm -f "$ping_tmp"
+
+# ═══════════════════════════════════════════════════
+# PHASE 2: DOWNLOAD
+# ═══════════════════════════════════════════════════
+down_tmp=$(mktemp)
+down_ok=0
+
+for url in "${DOWNLOAD_URLS[@]}"; do
+    curl -o /dev/null -s -w '%{speed_download}\n%{http_code}' \
+        --max-time 30 --connect-timeout 10 \
+        "$url" > "$down_tmp" 2>&1 &
+    pid=$!
+    spin_msg $pid "measuring download..."
+    wait $pid
+    curl_exit=$?
+
+    if [ $curl_exit -eq 0 ]; then
+        http_code=$(tail -1 "$down_tmp")
+        speed_bps=$(head -1 "$down_tmp")
+        if [ "$http_code" = "200" ] && [ -n "$speed_bps" ]; then
+            down_mbps=$(awk "BEGIN {printf \"%.2f\", $speed_bps * 8 / 1000000}")
+            down_ok=1
+            break
+        fi
+    fi
+done
+
+if [ $down_ok -eq 0 ]; then
+    down_mbps="0.00"
+fi
+down_val="${down_mbps} Mbit/s"
+rm -f "$down_tmp"
+
+# ═══════════════════════════════════════════════════
+# PHASE 3: UPLOAD
+# ═══════════════════════════════════════════════════
+up_tmp=$(mktemp)
+up_data=$(mktemp)
+dd if=/dev/zero bs=1M count=2 2>/dev/null > "$up_data"
+
+curl -X POST -s -w '%{speed_upload}\n%{http_code}' \
+    --max-time 30 --connect-timeout 10 \
+    -H "Content-Type: application/octet-stream" \
+    --data-binary @"$up_data" \
+    "$UPLOAD_URL" > "$up_tmp" 2>&1 &
+pid=$!
+spin_msg $pid "measuring upload..."
+wait $pid
+curl_exit=$?
+
+if [ $curl_exit -eq 0 ]; then
+    speed_bps=$(head -1 "$up_tmp")
+    if [ -n "$speed_bps" ]; then
+        up_mbps=$(awk "BEGIN {printf \"%.2f\", $speed_bps * 8 / 1000000}")
+    else
+        up_mbps="0.00"
+    fi
+else
+    up_mbps="0.00"
+fi
+up_val="${up_mbps} Mbit/s"
+rm -f "$up_tmp" "$up_data"
+
+# ── compute numbers ─────────────────────────────────
+ping_num="${ping_avg:-0}"
+down_num="$down_mbps"
+up_num="$up_mbps"
+
+down_int="${down_num%%.*}"; [ -z "$down_int" ] && down_int=0
+up_int="${up_num%%.*}"; [ -z "$up_int" ] && up_int=0
+bar_max=$(( down_int > up_int ? down_int : up_int ))
+[ "$bar_max" -lt 100 ] && bar_max=100
+bar_max=$(( bar_max + 10 ))
+
+# ── results ─────────────────────────────────────────
+section_top "LATENCY"
+section_line "  ${WARM}◆${R} $(rate_ping "$ping_val")"
+section_bot
+echo ""
+sep
+echo ""
+section_top "DOWNLOAD"
+section_line "  ${WARM}◆${R} $(rate_speed "$down_val")"
+section_line "$(vu_bar "$down_num" "$bar_max")"
+section_bot
+echo ""
+sep
+echo ""
+section_top "UPLOAD"
+section_line "  ${WARM}◆${R} $(rate_speed "$up_val")"
+section_line "$(vu_bar "$up_num" "$bar_max")"
+section_bot
+
+# ── signal status ───────────────────────────────────
+total_int=$(( down_int + up_int ))
+ping_int="${ping_num%%.*}"; [ -z "$ping_int" ] && ping_int=9999
+
+if [ "$total_int" -ge 200 ] && [ "$ping_int" -le 30 ]; then
+    status="${GRN}${BOLD}PRISTINE${R}"
+elif [ "$total_int" -ge 100 ]; then
+    status="${GRN}CLEAN${R}"
+elif [ "$total_int" -ge 50 ]; then
+    status="${CYN}ADEQUATE${R}"
+elif [ "$total_int" -ge 20 ]; then
+    status="${YEL}DEGRADED${R}"
+elif [ "$total_int" -ge 5 ]; then
+    status="${RED}DISTORTED${R}"
+else
+    status="${RED}${BOLD}NO SIGNAL${R}"
+fi
+
+echo ""
+sep
+echo ""
+dline "${AMBER}╔" "${AMBER}╗"
+fp_line "  ${WARM}SIGNAL STATUS${R}  $status"
+dline "${AMBER}╚" "${AMBER}╝"
+echo ""

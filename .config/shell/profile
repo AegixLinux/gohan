@@ -61,6 +61,18 @@ export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
 export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export QT_QPA_PLATFORMTHEME="gtk2" # Have QT use gtk2 theme.
+export GDK_BACKEND=x11			# Force GTK apps to use X11 (not Wayland)
+export QT_QPA_PLATFORM=xcb		# Force Qt apps to use X11 (not Wayland)
+export SDL_VIDEODRIVER=x11		# Force SDL apps to use X11
+export ELECTRON_OZONE_PLATFORM_HINT=x11	# Force Electron apps to use X11
+
+# nnn file manager
+export NNN_FIFO="/tmp/nnn.fifo"
+export NNN_OPENER="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/plugins/nuke"
+export NNN_PLUG='f:fzcd;o:fzopen;p:preview-tui;d:diffs;r:renamer;z:autojump;t:togglex;v:imgview'
+export NNN_COLORS='#04020301'
+export NNN_FCOLORS='c1e2272e006033f7c6d6abc4'
+export NNN_TRASH=1
 export MOZ_USE_XINPUT2="1" # Mozilla smooth scrolling/touchpads.
 export AWT_TOOLKIT="MToolkit wmname LG3D" # May have to install wmname
 export _JAVA_AWT_WM_NONREPARENTING=1 # Fix for Java applications in dwm

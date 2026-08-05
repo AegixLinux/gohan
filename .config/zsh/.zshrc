@@ -59,17 +59,14 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-# Use lf to switch directories and bind it to ctrl-o
-lfcd () {
-    tmp="$(mktemp -uq)"
-    trap 'rm -f $tmp >/dev/null 2>&1 && trap - HUP INT QUIT TERM PWR EXIT' HUP INT QUIT TERM PWR EXIT
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
-    fi
+# Use nnn to switch directories and bind it to ctrl-o
+ncd() {
+    [ "${NNNLVL:-0}" -eq 0 ] || { echo "nnn is already running"; return; }
+    export NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+    command nnn -c "$@"
+    [ ! -f "$NNN_TMPFILE" ] || { . "$NNN_TMPFILE"; rm -f -- "$NNN_TMPFILE" >/dev/null; }
 }
-bindkey -s '^o' '^ulfcd\n'
+bindkey -s '^o' '^uncd\n'
 
 bindkey -s '^a' '^ubc -lq\n'
 
