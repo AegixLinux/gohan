@@ -4,12 +4,12 @@
 ROFI_OPTS="-dmenu -i -theme-str 'window {width: 300px; location: center;}' -theme-str 'listview {lines: 8;}'"
 
 choice=$(printf "📺 Display
-🚀 Applications
+📶 WiFi
 😀 Emoji Picker
+🚀 Applications
 🔤 Font Size
 📏 HiDPI Scaling
 ⏰ Timezone Switcher
-📶 Network
 🔊 Audio
 ⚙️  System Info
 🔒 Lock Screen
@@ -29,8 +29,8 @@ case "$choice" in
         rofi-scaling ;;
     *"Timezone"*)
         dmenu-tz-switcher ;;
-    *"Network"*)
-        setsid -f st -e nmtui ;;
+    *"WiFi"*)
+        setsid -f wifimenu ;;
     *"Audio"*)
         setsid -f st -e pulsemixer ;;
     *"Display"*)
