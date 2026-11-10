@@ -9,7 +9,9 @@ autoload -U colors && colors	# Load colors
 #PS1='%B%{%F{15}%}🪶Aegix:%B%{%F{13}%}[%{%f%}%B%{%F{12}%}%n%{%f%}%B%{%F{107}%}✨%{%f%}%B%{%F{15}%}%M %{%f%}%{%F{12}%}%~%{%f%}%B%{%F{13}%}]%{%f%}$%b '
 
 # Minimal
-PS1='✨ %~ '
+#PS1='✨ %~ '
+#PS1='🦝 %~ '
+PS1='🐧 %~ '
 
 setopt autocd		# Automatically cd into typed directory.
 stty stop undef		# Disable ctrl-s to freeze terminal.
@@ -68,6 +70,12 @@ ncd() {
 }
 bindkey -s '^o' '^uncd\n'
 
+# psqueal - create and cd into date-stamped directory
+psqueal() {
+    local dir_name=$(date +%Y-%m-%d_%a)
+    mkdir -p "$dir_name" && cd "$dir_name"
+}
+
 bindkey -s '^a' '^ubc -lq\n'
 
 bindkey -s '^f' '^ucd "$(dirname "$(fzf)")"\n'
@@ -83,3 +91,16 @@ bindkey -M visual '^[[P' vi-delete
 
 # Load syntax highlighting; should be last.
 source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null
+
+# Scaling via Xft.dpi only (GDK_SCALE=2 was causing 4x scaling)
+# export GDK_SCALE=2
+# export QT_SCALE_FACTOR=2
+
+# Cursor configuration (smaller cursor for scaled displays)
+export XCURSOR_SIZE=20
+export XCURSOR_THEME=capitaine-cursors
+
+
+# Quick markdown -> clipboard (rich text) for pasting into Medium/Substack/Ghost
+mdclip() { pandoc -f gfm -t html "${1:-/dev/stdin}" | xclip -selection clipboard -t text/html; }
+

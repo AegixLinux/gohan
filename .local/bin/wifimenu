@@ -1,0 +1,394 @@
+#!/usr/bin/env bash
+# Aegix WiFi Menu - X11 version
+# Quick WiFi connection management: nmcli + dmenu. Pick a network, get on it.
+# Prompts for a password only when the saved one is missing or fails.
+# Ported from the Wayland wifimenu-aegix; bound to Super+Shift+W in dwm and
+# reachable from the Mod+M master menu.
+#
+# Captive portals (airports, hotels): after every connect the script probes
+# for one and, if found, opens the login page in the browser and copies its
+# URL to the clipboard. The same check is in the menu ("Captive portal
+# check") for networks joined some other way (nmtui, auto-reconnect).
+#
+#   wifimenu            the dmenu menu
+#   wifimenu portal     run the captive-portal check now, no menu
+#   wifimenu probe      print the verdict only: online | portal <url> | offline
+#                       (exit 0 / 1 / 2); for scripts and the status bar
+#   wifimenu watch      stay resident and run the portal flow whenever
+#                       NetworkManager reports a portal, however the network
+#                       was joined (nmtui, auto-reconnect). Started from xprofile.
+#
+# WIFIMENU_PROBE_URLS overrides the plain-http probe endpoints (space-separated).
+# BROWSER overrides how the portal page is opened (default: xdg-open).
+
+set -euo pipefail
+
+notify() {
+    local urgency="$1" title="$2" message="$3" timeout="${4:-2000}"
+    command -v notify-send >/dev/null 2>&1 && \
+        notify-send "$title" "$message" --urgency="$urgency" -t "$timeout" \
+            --app-name="wifimenu" --icon="network-wireless"
+}
+
+# ---- captive portal detection -------------------------------------------
+# A portal lets you associate and hands you an IP, then hijacks every plain
+# HTTP request and answers with its own login page. Browsers never see it
+# when they go straight to HTTPS (the hijack cannot forge the certificate,
+# so the page just times out). So we ask, over plain HTTP, for a URL whose
+# honest answer is known: a 204, or a 200 with a known one-line body.
+# Anything else that answers is the portal. Arch's own endpoint (the one
+# NetworkManager is configured with) goes first; Mozilla and Google are
+# fallbacks, so the probe does not report to big tech unless it has to.
+probe_urls="${WIFIMENU_PROBE_URLS:-http://ping.archlinux.org/nm-check.txt http://detectportal.firefox.com/success.txt http://connectivitycheck.gstatic.com/generate_204}"
+
+# Runtime state (dedup stamp, watcher lock); per-user, cleared at boot
+state_dir="${XDG_RUNTIME_DIR:-/tmp}/wifimenu"
+
+# portal_probe: prints `online`, `portal <url>` or `offline` (exit 0/1/2).
+# <url> is the portal's login page: its redirect target when it sends one,
+# a link dug out of the page when it does not, else the probe URL itself
+# (which, opened in a browser, the portal will hijack the same way).
+portal_probe() {
+    local url out meta body code redirect found
+    for url in $probe_urls; do
+        out=$(curl -sS -m 6 -o - -w '\n%{http_code} %{redirect_url}' "$url" 2>/dev/null) || continue
+        meta="${out##*$'\n'}"; body="${out%$'\n'*}"
+        code="${meta%% *}"; redirect="${meta#* }"
+        case "$code" in
+            204) echo online; return 0 ;;
+            200) case "$body" in
+                     success*|"NetworkManager is online"*) echo online; return 0 ;;
+                 esac ;;
+            000) continue ;;    # no HTTP answer at all
+        esac
+        if [[ -n "$redirect" ]]; then
+            echo "portal $redirect"
+        elif found=$(printf '%s' "$body" | portal_url_in_page); then
+            echo "portal $found"
+        else
+            echo "portal $url"
+        fi
+        return 1
+    done
+    # NetworkManager runs its own probe; trust it if it already knows
+    # (only with the default endpoints: an override means "your verdict only")
+    if [[ -z "${WIFIMENU_PROBE_URLS:-}" && "$(nmcli -g CONNECTIVITY general 2>/dev/null)" == "portal" ]]; then
+        echo "portal ${probe_urls%% *}"
+        return 1
+    fi
+    echo offline
+    return 2
+}
+
+# portal_url_in_page: first http(s) URL from a meta refresh, a JS location
+# assignment, or an <a href>, in that order. Reads the page on stdin.
+portal_url_in_page() {
+    local page u
+    page=$(cat)
+    u=$(printf '%s' "$page" | grep -oiE "url=['\"]?https?://[^'\" >]+" | head -1 | sed -E "s/^url=['\"]?//i") || true
+    [[ -z "$u" ]] && { u=$(printf '%s' "$page" | grep -oiE "location(\.href)?[[:space:]]*=[[:space:]]*['\"]https?://[^'\"]+" | head -1 | sed -E "s/^[^'\"]*['\"]//") || true; }
+    [[ -z "$u" ]] && { u=$(printf '%s' "$page" | grep -oiE "href=['\"]https?://[^'\"]+" | head -1 | sed -E "s/^href=['\"]//i") || true; }
+    # Last resort: any quoted absolute URL. Aruba portals (CLT airport) park
+    # the login URL in a JS variable: redirURL = 'http://198.18.2.1/reg.php?...'
+    [[ -z "$u" ]] && { u=$(printf '%s' "$page" | grep -oE "['\"]https?://[^'\"[:space:]]+['\"]" | head -1 | sed -E "s/^['\"]//; s/['\"]$//") || true; }
+    [[ -n "$u" ]] || return 1
+    printf '%s\n' "$u"
+}
+
+# portal_handle [quiet]: probe, and on a portal open the login page and copy
+# its URL. With "quiet", say nothing when the connection is simply fine
+# (used right after a connect, where "Connected" was already announced).
+portal_handle() {
+    local quiet="${1:-}" verdict url rc=0
+    verdict=$(portal_probe) || rc=$?
+    if [[ $rc -eq 2 && -n "$quiet" ]]; then   # fresh link: DNS may still be settling
+        sleep 2; rc=0; verdict=$(portal_probe) || rc=$?
+    fi
+    case "$rc" in
+        1)  portal_open "${verdict#portal }" ;;
+        2)  notify normal "WiFi" "No internet reachable yet (no captive portal seen either)" 4000 ;;
+        *)  [[ -z "$quiet" ]] && notify normal "WiFi ✓" "Internet reachable, no captive portal" 3000 ;;
+    esac
+    return 0
+}
+
+# portal_open <url>: copy the login URL, open it, then confirm in the
+# background once the portal lets us through. The connect path and the
+# watcher can both see the same portal within seconds of each other; a
+# stamp with the URL makes the second one a no-op (one tab, one poll).
+portal_open() {
+    local url="$1" stamp="$state_dir/last-portal"
+    mkdir -p "$state_dir"
+    if [[ -f "$stamp" && "$(cat "$stamp")" == "$url" ]] \
+        && [[ $(( $(date +%s) - $(stat -c %Y "$stamp") )) -lt 90 ]]; then
+        return 0
+    fi
+    printf '%s' "$url" > "$stamp"
+    command -v xclip >/dev/null 2>&1 && printf '%s' "$url" | xclip -selection clipboard
+    notify normal "WiFi 🔐" "Captive portal: opening $url (URL copied to clipboard)" 8000
+    setsid -f "${BROWSER:-xdg-open}" "$url" >/dev/null 2>&1 || true
+    # Detached: a caller capturing our output must not wait on the poll
+    portal_confirm >/dev/null 2>&1 </dev/null &
+    disown
+}
+
+# portal_confirm: poll for up to two minutes and say so when the portal
+# has let us through; then make NetworkManager and the bar notice too.
+portal_confirm() {
+    local _i
+    for _i in $(seq 40); do
+        sleep 3
+        if portal_probe >/dev/null 2>&1; then
+            notify normal "WiFi ✓" "Captive portal passed, you're online" 4000
+            nmcli networking connectivity check >/dev/null 2>&1 || true
+            bar_refresh
+            return 0
+        fi
+    done
+    return 0
+}
+
+# bar_refresh: poke the dwmblocks internet block (signal 4 in Aegix's config)
+bar_refresh() { pkill -RTMIN+4 dwmblocks 2>/dev/null || true; }
+
+# portal_watch: follow NetworkManager's connectivity verdicts for the life
+# of the session and run the portal flow on each "portal". NM probes on
+# every connection change (and every 5 minutes), so this catches networks
+# joined by nmtui or auto-reconnect, and hotels that re-prompt daily.
+portal_watch() {
+    local line
+    mkdir -p "$state_dir"
+    exec 9>"$state_dir/watch.lock"
+    flock -n 9 || exit 0          # one watcher per session
+    bar_refresh
+    nmcli monitor 2>/dev/null | while IFS= read -r line; do
+        case "$line" in
+            *"Connectivity is now 'portal'"*) portal_handle quiet ;;
+            *"Connectivity is now"*)          bar_refresh ;;
+        esac
+    done
+}
+
+case "${1:-}" in
+    probe)  portal_probe || exit $?; exit 0 ;;
+    portal) portal_handle; exit 0 ;;
+    watch)  portal_watch; exit 0 ;;
+    "")     ;;
+    *)      printf 'usage: wifimenu [probe|portal|watch]\n' >&2; exit 2 ;;
+esac
+
+for cmd in nmcli dmenu; do
+    command -v "$cmd" >/dev/null 2>&1 || { notify critical "wifimenu" "$cmd not found" 5000; exit 1; }
+done
+
+menu()  { dmenu -c -i -l "${2:-15}" -p "$1"; }
+
+# First wifi-capable device (replaces the old hardcoded wlan0)
+wifi_dev="$(nmcli -t -f DEVICE,TYPE dev 2>/dev/null | awk -F: '$2=="wifi"{print $1; exit}')"
+
+# Active SSID, unescaped (nmcli -t escapes ':' in values as '\:')
+active_ssid() {
+    nmcli -t -f active,ssid dev wifi 2>/dev/null \
+        | grep '^yes' | head -1 | cut -d: -f2- | sed 's/\\:/:/g'
+}
+
+# Band of the active association: 2.4G, 5G, or 6G (from the AP frequency)
+active_band() {
+    local freq
+    freq=$(nmcli -t -f active,freq dev wifi 2>/dev/null \
+        | grep '^yes' | head -1 | cut -d: -f2 | grep -oE '[0-9]+' || true)
+    [[ -n "$freq" ]] || return 0
+    freq_to_band "$freq"
+}
+
+freq_to_band() {
+    if   [[ "$1" -lt 3000 ]]; then echo "2.4G"
+    elif [[ "$1" -lt 5925 ]]; then echo "5G"
+    else                           echo "6G"
+    fi
+}
+
+wifi_status=$(nmcli radio wifi)
+current_ssid=$(active_ssid || true)
+
+options=()
+if [[ "$wifi_status" == "enabled" ]]; then
+    options+=("🔴  Turn WiFi Off")
+    if [[ -n "$current_ssid" ]]; then
+        options+=("✅  Connected: $current_ssid")
+        options+=("🔐  Captive portal check")
+        options+=("🔌  Disconnect")
+    fi
+else
+    options+=("🟢  Turn WiFi On")
+fi
+
+if [[ "$wifi_status" == "enabled" ]]; then
+    options+=("🔍  Scan for Networks")
+    options+=("──────────────────")
+
+    # SIGNAL:SECURITY:FREQ:SSID (ssid last: it may itself contain colons),
+    # strongest first. An AP broadcasting one SSID on 2.4 and 5GHz shows
+    # one row per band, labeled, so the band is the user's choice; within
+    # a band, only the strongest AP is listed.
+    cur_band="$(active_band || true)"
+    declare -A seen_key=()
+    shown=0
+    while IFS= read -r line; do
+        signal="${line%%:*}"; rest="${line#*:}"
+        security="${rest%%:*}"; rest="${rest#*:}"
+        freq="${rest%%:*}"; ssid="${rest#*:}"
+        ssid="${ssid//\\:/:}"
+        [[ -z "$ssid" ]] && continue
+        band="$(freq_to_band "${freq%% *}")"
+        [[ -n "${seen_key[$ssid|$band]:-}" ]] && continue
+        seen_key[$ssid|$band]=1
+        [[ "$shown" -ge 20 ]] && break
+        shown=$((shown + 1))
+
+        if   [[ "$signal" -ge 80 ]]; then strength="▂▄▆█"
+        elif [[ "$signal" -ge 60 ]]; then strength="▂▄▆_"
+        elif [[ "$signal" -ge 40 ]]; then strength="▂▄__"
+        else                              strength="▂___"
+        fi
+
+        if   [[ "$security" == *"WPA"* ]]; then lock="🔒"
+        elif [[ -n "$security" ]];         then lock="🔐"
+        else                                    lock="  "
+        fi
+
+        if [[ "$ssid" == "$current_ssid" && "$band" == "$cur_band" ]]; then
+            options+=("$strength $lock $ssid [$band] ✓")
+        else
+            options+=("$strength $lock $ssid [$band]")
+        fi
+    done < <(nmcli -t -f signal,security,freq,ssid dev wifi list 2>/dev/null | sort -rn -t: -k1)
+fi
+
+options+=("──────────────────")
+options+=("⚙️   Network Settings (nmtui)")
+options+=("❌  Cancel")
+
+choice=$(printf '%s\n' "${options[@]}" | menu "📶 WiFi:" 20) || true
+[[ -n "$choice" ]] || exit 0
+
+# try_connect <ssid> <band> [password]: activate a connection and VERIFY the
+# result. Prefers `con up` on an existing saved profile: `dev wifi connect`
+# on a saved network silently creates a duplicate "SSID 1" profile and is
+# the main reason switching used to fail. The chosen band is steered via the
+# profile's 802-11-wireless.band property (bg = 2.4GHz, a = 5/6GHz), so the
+# choice sticks until the user picks the other band's row. Returns 0 only
+# when the active SSID afterwards is the one asked for.
+try_connect() {
+    local ssid="$1" band="${2:-}" password="${3:-}" err="" nm_band=""
+
+    case "$band" in
+        2.4G) nm_band="bg" ;;
+        5G|6G) nm_band="a" ;;
+    esac
+
+    if nmcli -t -f NAME con show 2>/dev/null | sed 's/\\:/:/g' | grep -Fxq "$ssid"; then
+        [[ -n "$nm_band" ]] && nmcli con modify "$ssid" 802-11-wireless.band "$nm_band" 2>/dev/null || true
+        if [[ -n "$password" ]]; then
+            nmcli con modify "$ssid" wifi-sec.psk "$password" 2>/dev/null || true
+        fi
+        err=$(nmcli -w 20 con up "$ssid" 2>&1 >/dev/null) || true
+    else
+        if [[ -n "$password" ]]; then
+            err=$(nmcli -w 20 dev wifi connect "$ssid" password "$password" 2>&1 >/dev/null) || true
+        else
+            err=$(nmcli -w 20 dev wifi connect "$ssid" 2>&1 >/dev/null) || true
+        fi
+        # dev wifi connect just created the profile; record the band choice
+        # and re-activate on it if the association landed on the other band.
+        if [[ -n "$nm_band" && "$(active_ssid)" == "$ssid" ]]; then
+            nmcli con modify "$ssid" 802-11-wireless.band "$nm_band" 2>/dev/null || true
+            if [[ "$(active_band)" != "$band" ]]; then
+                err=$(nmcli -w 20 con up "$ssid" 2>&1 >/dev/null) || true
+            fi
+        fi
+    fi
+
+    # Trust the state, not the exit code
+    if [[ "$(active_ssid)" == "$ssid" ]]; then
+        return 0
+    fi
+    [[ -n "$err" ]] && printf '%s\n' "$err" | head -1
+    return 1
+}
+
+case "$choice" in
+    "🔴  Turn WiFi Off")
+        nmcli radio wifi off
+        notify normal "WiFi" "WiFi disabled" 1500
+        ;;
+
+    "🟢  Turn WiFi On")
+        nmcli radio wifi on
+        notify normal "WiFi" "WiFi enabled" 1500
+        sleep 2
+        nmcli dev wifi rescan 2>/dev/null || true
+        ;;
+
+    "🔐  Captive portal check")
+        notify normal "WiFi" "Checking for a captive portal..." 3000
+        portal_handle
+        ;;
+
+    "🔌  Disconnect")
+        nmcli con down "$current_ssid" 2>/dev/null || \
+            { [[ -n "$wifi_dev" ]] && nmcli dev disconnect "$wifi_dev" 2>/dev/null; }
+        notify normal "WiFi" "Disconnected from $current_ssid" 2000
+        ;;
+
+    "🔍  Scan for Networks")
+        notify normal "WiFi" "Scanning for networks..." 1500
+        nmcli dev wifi rescan 2>/dev/null || true
+        sleep 2
+        exec "$0"
+        ;;
+
+    "⚙️   Network Settings (nmtui)")
+        exec "${TERMINAL:-st}" -e nmtui
+        ;;
+
+    "❌  Cancel"|"──────────────────"|"")
+        exit 0
+        ;;
+
+    *"Connected:"*)
+        notify normal "WiFi" "Already connected to this network" 2000
+        ;;
+
+    *)
+        # Strip signal bars, lock glyph, the [band] tag, and the checkmark
+        line=$(printf '%s' "$choice" | sed 's/^[▂▄▆█_]* *[🔒🔐 ]* *//; s/ *✓$//')
+        band=$(printf '%s' "$line" | grep -oE '\[(2\.4|5|6)G\]$' | tr -d '[]' || true)
+        ssid=$(printf '%s' "$line" | sed -E 's/ *\[(2\.4|5|6)G\]$//')
+        [[ -n "$ssid" ]] || exit 0
+
+        notify normal "WiFi" "Connecting to $ssid${band:+ ($band)}..." 8000
+        if err=$(try_connect "$ssid" "$band"); then
+            notify normal "WiFi ✓" "Connected to $ssid${band:+ on $band}" 4000
+            portal_handle quiet
+            exit 0
+        fi
+
+        # Saved credentials missing or wrong: ask once via dmenu's
+        # password mode (-P, input hidden), same idiom as dmenupass.
+        password=$(dmenu -c -P -p "🔑 Password for $ssid:" <&- || true)
+        if [[ -z "$password" ]]; then
+            notify critical "WiFi ✗" "Not connected to $ssid${err:+ ($err)}" 4000
+            exit 0
+        fi
+
+        notify normal "WiFi" "Connecting to $ssid${band:+ ($band)}..." 8000
+        if err=$(try_connect "$ssid" "$band" "$password"); then
+            notify normal "WiFi ✓" "Connected to $ssid${band:+ on $band}" 4000
+            portal_handle quiet
+        else
+            notify critical "WiFi ✗" "Failed to connect to $ssid${err:+ ($err)}" 5000
+            exec "$0"   # reopen so the user can retry without re-summoning
+        fi
+        ;;
+esac

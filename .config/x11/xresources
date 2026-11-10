@@ -1,8 +1,15 @@
+!! Cursor configuration
+Xcursor.theme: capitaine-cursors
+Xcursor.size: 20
+
 !! Transparency (0-1):
 *.alpha: 0.8
 
 !! Set a default font and font size as below:
 *.font: monospace:size=10
+
+!! DPI setting for mixed displays (120 = 1.25x scaling, 96 = no scaling)
+Xft.dpi: 96
 
 /* name		dark	light */
 /* black	0	8 */

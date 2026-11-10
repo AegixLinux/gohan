@@ -96,9 +96,9 @@ case $BLOCK_BUTTON in
 At ${LOW_THRESHOLD}% an unmissable alarm fires (drill: sb-battery test).
 - Scroll to change adjust xbacklight." ;;
 	#4) xbacklight -inc 10 ;;
-	4) sudo brightnessctl s 10%+ ;;
+	4) brightnessctl s 10%+ ;;
 	#5) xbacklight -dec 10 ;;
-	5) sudo brightnessctl s 10%- ;;
+	5) brightnessctl s 10%- ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
@@ -120,6 +120,10 @@ for battery in "$@"; do
 		bat_status="$(cat "$battery/status" 2>&1)"
 		capacity="$(cat "$battery/capacity" 2>&1)"
 	fi
+	# Some firmwares (ThinkPads especially) report capacity against design
+	# capacity, so a healthy or recalibrated battery reads above 100. Clamp it:
+	# a bar that says 101% just looks broken.
+	[ "$capacity" -gt 100 ] 2>/dev/null && capacity=100
 	# Sets up the status and capacity
 	case "$bat_status" in
 		"Full") status="⚡" ;;

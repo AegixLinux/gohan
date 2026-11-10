@@ -65,7 +65,7 @@
 #   2. Clean-up the unnecessary exit codes
 
 # set to 1 to enable GUI apps and/or BIN execution
-GUI="${GUI:-0}"
+GUI="${GUI:-1}"
 BIN="${BIN:-0}"
 
 set -euf -o noclobber -o noglob -o nounset
@@ -223,7 +223,7 @@ handle_extension() {
         ## Markdown
         md)
             if type glow >/dev/null 2>&1; then
-                glow -sdark "${FPATH}" | eval "$PAGER"
+                glow -sdark -p "${FPATH}"
                 exit 0
             elif type lowdown >/dev/null 2>&1; then
                 cols=$(tput cols)

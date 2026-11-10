@@ -147,7 +147,6 @@ parse_ssh_key() {
     # Get public key content and store for interactive mode
     local pubfile="${keyfile}.pub"
     if [ -f "$pubfile" ]; then
-        pubkey=$(cat "$pubfile")
         algorithm=$(echo "$pubkey" | cut -d' ' -f1)
         fingerprint=$(ssh-keygen -lf "$pubfile" 2>/dev/null | awk '{print $2}')
         comment=$(echo "$pubkey" | cut -d' ' -f3-)

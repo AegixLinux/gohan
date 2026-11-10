@@ -19,11 +19,27 @@ Plug 'vimwiki/vimwiki'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'ap/vim-css-color'
+Plug 'MeanderingProgrammer/render-markdown.nvim'
 call plug#end()
+
+" Markdown reading:
+" Keep vimwiki inside its wiki dir so every other .md file stays filetype markdown.
+    let g:vimwiki_global_ext = 0
+" Render markdown in the buffer (headings, code blocks, tables, checkboxes).
+" Uses the markdown parsers bundled with nvim; pcall keeps first launch quiet before :PlugInstall.
+lua << EOF
+local ok, rm = pcall(require, 'render-markdown')
+if ok then
+    vim.treesitter.language.register('markdown', 'vimwiki')
+    rm.setup({ file_types = { 'markdown', 'vimwiki' } })
+end
+EOF
+" ,M toggles in-buffer rendering; ,m opens the current file rendered by glow in a split.
+    nnoremap <leader>M :RenderMarkdown toggle<CR>
+    nnoremap <leader>m :vsplit \| terminal glow -p %:p:S<CR>
 
 set title
 " set bg=light
-" set go=a
 set mouse=a
 set nohlsearch
 set clipboard+=unnamedplus
@@ -100,3 +116,8 @@ nnoremap <leader>h :call ToggleHiddenAll()<CR>
 " if typed fast without the timeout.
 source ~/.config/nvim/shortcuts.vim
 
+" Auto-recompile and restart dwmblocks when editing its config
+autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid dwmblocks & }
+
+" Auto-recompile dwm on config change
+autocmd BufWritePost ~/.local/src/dwm/config.h !cd ~/.local/src/dwm/; sudo make install
